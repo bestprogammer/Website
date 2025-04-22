@@ -68,6 +68,22 @@
       margin-top: 1rem;
       color: #555;
     }
+
+    .exe-btn {
+      font-size: 1.2rem;
+      padding: 1rem 1.5rem;
+      background: linear-gradient(45deg, #ff8c00, #ff4500);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 2rem;
+      box-shadow: 0 0 10px #ff8c00, 0 0 15px #ff4500;
+    }
+
+    .exe-btn:hover {
+      animation: shake 0.5s infinite;
+    }
   </style>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
@@ -122,6 +138,10 @@
   </a>
 
   <p id="download-counter" class="counter">📊 Downloads so far: loading...</p>
+
+  <a href="URL_TO_YOUR_EXE_FILE.exe" download>
+    <button class="exe-btn" onclick="incrementDownloadCount()">⬇️ Download EXE ⬇️</button>
+  </a>
 
   <p class="quote">Check us out on ther Vision Esportin</p>
 
