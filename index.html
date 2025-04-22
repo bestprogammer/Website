@@ -62,7 +62,47 @@
       font-style: italic;
       margin-top: 1.5rem;
     }
+
+    .counter {
+      font-size: 1.2rem;
+      margin-top: 1rem;
+      color: #555;
+    }
   </style>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDCQz9V-ruLNaJNZ47ktUCZbIe-_RbT57Q",
+      authDomain: "rickeoll.firebaseapp.com",
+      databaseURL: "https://rickeoll-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "rickeoll",
+      storageBucket: "rickeoll.firebasestorage.app",
+      messagingSenderId: "736075919328",
+      appId: "1:736075919328:web:c0f4374192df63be8c8585",
+      measurementId: "G-N16MN2620N"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const countRef = ref(db, 'downloads/count');
+
+    function incrementDownloadCount() {
+      runTransaction(countRef, (currentValue) => {
+        return (currentValue || 0) + 1;
+      });
+    }
+
+    window.incrementDownloadCount = incrementDownloadCount;
+
+    // Live update the counter
+    const counterEl = document.getElementById("download-counter");
+    onValue(countRef, (snapshot) => {
+      const count = snapshot.val();
+      counterEl.textContent = `📊 Downloads so far: ${count || 0}`;
+    });
+  </script>
 </head>
 <body>
 
@@ -77,9 +117,11 @@
     <p>🚗 Temo with frii wifie</p>
   </div>
 
-  <a href="https://www.youtube.com/watch?v=xvFZjo5PgG0" target="_blank">
+  <a href="https://www.youtube.com/watch?v=xvFZjo5PgG0" target="_blank" onclick="incrementDownloadCount()">
     <button class="download-btn">⬇️ DownLoD ⬇️</button>
   </a>
+
+  <p id="download-counter" class="counter">📊 Downloads so far: loading...</p>
 
   <p class="quote">Check us out on ther Vision Esportin</p>
 
