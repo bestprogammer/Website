@@ -36,6 +36,23 @@
       transform: scale(1.2);
     }
 
+    .shuffle-btn {
+      margin-top: 1rem;
+      background: #3333ff;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .shuffle-btn:hover {
+      background: #ff00cc;
+      transform: scale(1.1);
+    }
+
     .title {
       font-size: 3rem;
       font-weight: bold;
@@ -114,21 +131,21 @@
 
     window.incrementDownloadCount = incrementDownloadCount;
 
-    const counterEl = document.getElementById("download-counter");
-    onValue(countRef, (snapshot) => {
-      const count = snapshot.val();
-      counterEl.textContent = `📊 Downloads so far: ${count || 0}`;
+    window.addEventListener("DOMContentLoaded", () => {
+      const counterEl = document.getElementById("download-counter");
+      onValue(countRef, (snapshot) => {
+        const count = snapshot.val();
+        counterEl.textContent = `📊 Downloads so far: ${count || 0}`;
+      });
     });
   </script>
 </head>
 <body>
 
-  <div class="menu">
-    <a href="https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1" target="_blank">🎵 Rickroll</a>
-    <a href="https://fakeupdate.net/win10/" target="_blank">🖥️ Windows Update</a>
-    <a href="https://pointerpointer.com/" target="_blank">🤑 Gewinnspiel</a>
-    <a href="https://omfgdogs.com/" target="_blank">🐶 Hunde-Party</a>
+  <div class="menu" id="prank-menu">
+    <!-- Links werden hier eingefügt -->
   </div>
+  <button class="shuffle-btn" onclick="shuffleLinks()">🔀 Shuffle!</button>
 
   <div class="title">🔥 Originake Storlinked WiFi 🔥</div>
 
@@ -148,6 +165,43 @@
   <p id="download-counter" class="counter">📊 Downloads so far: loading...</p>
 
   <p class="quote">Check us out on ther Vision Esportin</p>
+
+  <script>
+    const prankLinks = [
+      { url: "https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1", label: "🎵 Rickroll" },
+      { url: "https://fakeupdate.net/win10/", label: "🖥️ Windows Update" },
+      { url: "https://pointerpointer.com/", label: "🤑 Gewinnspiel" },
+      { url: "https://omfgdogs.com/", label: "🐶 Hunde-Party" },
+      { url: "https://theuselessweb.com/", label: "🌀 Useless Button" },
+      { url: "https://endless.horse/", label: "🐴 Endless Horse" },
+      { url: "https://heeeeeeeey.com/", label: "🎤 Heeeey!" },
+      { url: "https://ninjaflex.com/", label: "🥷 Ninja Flex" },
+      { url: "https://cat-bounce.com/", label: "🐱 Cat Bounce" },
+      { url: "https://corndog.io/", label: "🌽 Corndog" },
+      // Füge hier weitere hinzu bis 100!
+    ];
+
+    function getRandomItems(arr, count) {
+      const shuffled = arr.slice().sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, count);
+    }
+
+    function shuffleLinks() {
+      const menu = document.getElementById("prank-menu");
+      menu.innerHTML = ""; // Reset
+
+      const selected = getRandomItems(prankLinks, 4);
+      selected.forEach(link => {
+        const a = document.createElement("a");
+        a.href = link.url;
+        a.target = "_blank";
+        a.textContent = link.label;
+        menu.appendChild(a);
+      });
+    }
+
+    window.addEventListener("DOMContentLoaded", shuffleLinks); // beim Laden direkt ausführen
+  </script>
 
 </body>
 </html>
