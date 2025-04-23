@@ -36,9 +36,14 @@
       margin-top: 2rem;
       box-shadow: 0 0 15px #ff00cc, 0 0 20px #3333ff;
       animation: rocknroll 1s infinite alternate;
+      transition: transform 0.2s ease;
     }
     .download-btn:hover {
       animation: shake 0.5s infinite;
+    }
+    .download-btn.clicked {
+      animation: none;
+      transform: scale(1.2);
     }
     @keyframes rocknroll {
       0% { transform: rotate(-2deg); }
@@ -96,10 +101,15 @@
       });
     });
 
-    // RickRoll Video öffnen und zählen
+    // RickRoll Video öffnen, zählen und Button animieren
     window.downloadAndRickRoll = function() {
-      incrementDownloadCount();
-      window.open("https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1&mute=1", "_blank");
+      const btn = document.querySelector('.download-btn');
+      btn.classList.add('clicked');
+      setTimeout(() => {
+        btn.classList.remove('clicked');
+        incrementDownloadCount();
+        window.open("https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1", "_blank");
+      }, 200);
     };
   </script>
 </head>
@@ -125,3 +135,4 @@
 
 </body>
 </html>
+
