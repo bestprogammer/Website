@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Originake Storlinked WiFi</title>
+  <title>🔥 Originake Storlinked WiFi 🔥</title>
   <style>
     body {
       font-family: Comic Sans MS, cursive, sans-serif;
@@ -12,11 +12,36 @@
       text-align: center;
       padding: 2rem;
     }
+
+    .menu {
+      background: linear-gradient(45deg, #ff00cc, #3333ff);
+      padding: 1rem;
+      text-align: center;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 20px #ff00cc, 0 0 20px #3333ff;
+    }
+
+    .menu a {
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      margin: 0 1rem;
+      font-size: 1.2rem;
+      transition: color 0.3s, transform 0.3s;
+    }
+
+    .menu a:hover {
+      color: #ffeb3b;
+      transform: scale(1.2);
+    }
+
     .title {
       font-size: 3rem;
       font-weight: bold;
       margin-bottom: 1rem;
     }
+
     .box {
       border: 3px dashed #555;
       padding: 1.5rem;
@@ -25,6 +50,7 @@
       background-color: #fff;
       border-radius: 10px;
     }
+
     .download-btn {
       font-size: 2rem;
       padding: 1rem 2rem;
@@ -36,30 +62,24 @@
       margin-top: 2rem;
       box-shadow: 0 0 15px #ff00cc, 0 0 20px #3333ff;
       animation: rocknroll 1s infinite alternate;
-      transition: transform 0.2s ease;
+      transition: transform 0.3s;
     }
+
     .download-btn:hover {
-      animation: shake 0.5s infinite;
-    }
-    .download-btn.clicked {
       animation: none;
       transform: scale(1.2);
     }
+
     @keyframes rocknroll {
       0% { transform: rotate(-2deg); }
       100% { transform: rotate(2deg); }
     }
-    @keyframes shake {
-      0% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      50% { transform: translateX(5px); }
-      75% { transform: translateX(-5px); }
-      100% { transform: translateX(0); }
-    }
+
     .quote {
       font-style: italic;
       margin-top: 1.5rem;
     }
+
     .counter {
       font-size: 1.2rem;
       margin-top: 1rem;
@@ -87,34 +107,28 @@
     const countRef = ref(db, 'downloads/count');
 
     function incrementDownloadCount() {
-      runTransaction(countRef, (currentValue) => (currentValue || 0) + 1);
+      runTransaction(countRef, (currentValue) => {
+        return (currentValue || 0) + 1;
+      });
     }
 
     window.incrementDownloadCount = incrementDownloadCount;
 
-    // Counter live anzeigen
-    window.addEventListener('DOMContentLoaded', () => {
-      const counterEl = document.getElementById("download-counter");
-      onValue(countRef, (snapshot) => {
-        const count = snapshot.val();
-        counterEl.textContent = `📊 Downloads so far: ${count || 0}`;
-      });
+    const counterEl = document.getElementById("download-counter");
+    onValue(countRef, (snapshot) => {
+      const count = snapshot.val();
+      counterEl.textContent = `📊 Downloads so far: ${count || 0}`;
     });
-
-    // RickRoll Video öffnen, zählen und Button animieren
-    window.downloadAndRickRoll = function() {
-      const btn = document.querySelector('.download-btn');
-      btn.classList.add('clicked');
-      setTimeout(() => {
-        btn.classList.remove('clicked');
-        incrementDownloadCount();
-        window.open("https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1", "_blank");
-      }, 200);
-    };
   </script>
 </head>
-
 <body>
+
+  <div class="menu">
+    <a href="https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1" target="_blank">🎵 Rickroll</a>
+    <a href="https://fakeupdate.net/win10/" target="_blank">🖥️ Windows Update</a>
+    <a href="https://pointerpointer.com/" target="_blank">🤑 Gewinnspiel</a>
+    <a href="https://omfgdogs.com/" target="_blank">🐶 Hunde-Party</a>
+  </div>
 
   <div class="title">🔥 Originake Storlinked WiFi 🔥</div>
 
@@ -127,7 +141,9 @@
     <p>🚗 Temo with frii wifie</p>
   </div>
 
-  <button class="download-btn" onclick="downloadAndRickRoll()">⬇️ DownLoD ⬇️</button>
+  <a href="https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1" target="_blank" onclick="incrementDownloadCount()">
+    <button class="download-btn">⬇️ DownLoD ⬇️</button>
+  </a>
 
   <p id="download-counter" class="counter">📊 Downloads so far: loading...</p>
 
