@@ -1,336 +1,354 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>🔥 Originake Storlinked WiFi 🔥</title>
-  <style>
-    /* Loading Screen Overlay */
-    #loading-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: black;
-      color: #00ff00;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 2rem;
-      font-family: 'Courier New', monospace;
-      z-index: 9999;
-      animation: glitch-body 1s infinite;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🔥 Originake Storlinked WiFi 🔥</title>
 
-    @keyframes glitch-body {
-      0% { text-shadow: 2px 0 red; }
-      20% { text-shadow: -2px 0 blue; }
-      40% { text-shadow: -1px 0 green; }
-      60% { text-shadow: 1px 0 yellow; }
-      100% { text-shadow: 0 0 black; }
-    }
+<style>
 
-    .scanline-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: repeating-linear-gradient(
-        rgba(255, 255, 255, 0.1) 0,
-        rgba(255, 255, 255, 0.1) 1px,
-        transparent 1px,
-        transparent 2px
-      );
-      animation: scanline-anim 0.1s linear infinite;
-      pointer-events: none;
-    }
+/* ========================= */
+/* 💀 LOADING CHAOS 💀 */
+/* ========================= */
 
-    @keyframes scanline-anim {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-10px); }
-    }
+#loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  color: #00ff00;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: monospace;
+  font-size: 3rem;
+  z-index: 9999;
+  overflow: hidden;
+  animation: screenShake 0.2s infinite;
+}
 
-    body {
-      font-family: Comic Sans MS, cursive, sans-serif;
-      background-color: #fdf6e3;
-      color: #333;
-      text-align: center;
-      padding: 2rem;
-    }
+.rgb-glitch {
+  position: relative;
+  animation: glitchFlicker 0.3s infinite;
+}
 
-    .menu {
-      background: linear-gradient(45deg, #ff00cc, #3333ff);
-      padding: 1rem;
-      text-align: center;
-      border-radius: 15px;
-      margin-bottom: 2rem;
-      box-shadow: 0 0 20px #ff00cc, 0 0 20px #3333ff;
-    }
+.rgb-glitch::before,
+.rgb-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+}
 
-    .menu a {
-      color: white;
-      font-weight: bold;
-      text-decoration: none;
-      margin: 0 1rem;
-      font-size: 1.2rem;
-      transition: color 0.3s, transform 0.3s;
-    }
+.rgb-glitch::before {
+  color: red;
+  transform: translate(-2px, 0);
+}
 
-    .menu a:hover {
-      color: #ffeb3b;
-      transform: scale(1.2);
-    }
+.rgb-glitch::after {
+  color: blue;
+  transform: translate(2px, 0);
+}
 
-    .shuffle-btn {
-      margin-top: 1rem;
-      background: #3333ff;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background 0.3s, transform 0.3s;
-    }
+@keyframes glitchFlicker {
+  0% { opacity: 1; }
+  50% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
 
-    .shuffle-btn:hover {
-      background: #ff00cc;
-      transform: scale(1.1);
-    }
+@keyframes screenShake {
+  0% { transform: translate(0px,0px); }
+  25% { transform: translate(2px,-2px); }
+  50% { transform: translate(-2px,2px); }
+  75% { transform: translate(2px,2px); }
+  100% { transform: translate(0px,0px); }
+}
 
-    .title {
-      font-size: 3rem;
-      font-weight: bold;
-      margin-bottom: 1rem;
-    }
+.matrix {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
 
-    .box {
-      border: 3px dashed #555;
-      padding: 1.5rem;
-      margin: 2rem auto;
-      max-width: 600px;
-      background-color: #fff;
-      border-radius: 10px;
-    }
+.hacked {
+  position: absolute;
+  bottom: 10%;
+  color: red;
+  font-size: 2rem;
+  animation: blink 0.5s infinite;
+}
 
-    .download-btn {
-      font-size: 2rem;
-      padding: 1rem 2rem;
-      background: linear-gradient(45deg, #ff00cc, #3333ff);
-      color: white;
-      border: none;
-      border-radius: 15px;
-      cursor: pointer;
-      margin-top: 2rem;
-      box-shadow: 0 0 15px #ff00cc, 0 0 20px #3333ff;
-      animation: rocknroll 1s infinite alternate;
-      transition: transform 0.3s;
-    }
+@keyframes blink {
+  50% { opacity: 0; }
+}
 
-    .download-btn:hover {
-      animation: none;
-      transform: scale(1.2);
-    }
+/* ========================= */
+/* 🎨 NORMAL PAGE 🎨 */
+/* ========================= */
 
-    @keyframes rocknroll {
-      0% { transform: rotate(-2deg); }
-      100% { transform: rotate(2deg); }
-    }
+body {
+  font-family: Comic Sans MS, cursive, sans-serif;
+  background: #fdf6e3;
+  text-align: center;
+  padding: 2rem;
+}
 
-    .quote {
-      font-style: italic;
-      margin-top: 1.5rem;
-    }
+.menu {
+  background: linear-gradient(45deg,#ff00cc,#3333ff);
+  padding:1rem;
+  border-radius:15px;
+  margin-bottom:2rem;
+}
 
-    .counter {
-      font-size: 1.2rem;
-      margin-top: 1rem;
-      color: #555;
-    }
-  </style>
+.menu a {
+  color:white;
+  margin:0 1rem;
+  font-weight:bold;
+  text-decoration:none;
+}
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-    import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+.shuffle-btn {
+  background:#3333ff;
+  color:white;
+  border:none;
+  padding:0.5rem 1rem;
+  border-radius:10px;
+  cursor:pointer;
+}
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDCQz9V-ruLNaJNZ47ktUCZbIe-_RbT57Q",
-      authDomain: "rickeoll.firebaseapp.com",
-      databaseURL: "https://rickeoll-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "rickeoll",
-      storageBucket: "rickeoll.firebasestorage.app",
-      messagingSenderId: "736075919328",
-      appId: "1:736075919328:web:c0f4374192df63be8c8585",
-      measurementId: "G-N16MN2620N"
-    };
+.title {
+  font-size:3rem;
+  font-weight:bold;
+}
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const countRef = ref(db, 'downloads/count');
+.box {
+  border:3px dashed #555;
+  padding:1.5rem;
+  margin:2rem auto;
+  max-width:600px;
+  background:white;
+  border-radius:10px;
+}
 
-    function incrementDownloadCount() {
-      runTransaction(countRef, (currentValue) => {
-        return (currentValue || 0) + 1;
-      });
-    }
+.download-btn {
+  font-size:2rem;
+  padding:1rem 2rem;
+  background:linear-gradient(45deg,#ff00cc,#3333ff);
+  color:white;
+  border:none;
+  border-radius:15px;
+  cursor:pointer;
+}
 
-    window.incrementDownloadCount = incrementDownloadCount;
+.counter {
+  margin-top:1rem;
+}
 
-    window.addEventListener("DOMContentLoaded", () => {
-      const counterEl = document.getElementById("download-counter");
-      onValue(countRef, (snapshot) => {
-        const count = snapshot.val();
-        counterEl.textContent = `📊 Downloads so far: ${count || 0}`;
-      });
+</style>
 
-      // Hide loading screen after 5 seconds
-      setTimeout(() => {
-        const loadingOverlay = document.getElementById("loading-overlay");
-        loadingOverlay.style.display = "none";
-      }, 5000);
-    });
-  </script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDCQz9V-ruLNaJNZ47ktUCZbIe-_RbT57Q",
+  authDomain: "rickeoll.firebaseapp.com",
+  databaseURL: "https://rickeoll-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "rickeoll",
+  storageBucket: "rickeoll.firebasestorage.app",
+  messagingSenderId: "736075919328",
+  appId: "1:736075919328:web:c0f4374192df63be8c8585"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const countRef = ref(db,'downloads/count');
+
+function incrementDownloadCount(){
+  runTransaction(countRef,(val)=>(val||0)+1);
+}
+window.incrementDownloadCount=incrementDownloadCount;
+
+window.addEventListener("DOMContentLoaded",()=>{
+
+  const counter=document.getElementById("download-counter");
+  onValue(countRef,(snap)=>{
+    counter.textContent="📊 Downloads so far: "+(snap.val()||0);
+  });
+
+  setTimeout(()=>{
+    document.getElementById("loading-overlay").style.display="none";
+  },6000);
+
+});
+</script>
+
 </head>
+
 <body>
 
-  <div id="loading-overlay">
-    <div class="scanline-overlay"></div>
-    <div>Loading virus assets / please wait 🔒</div>
-  </div>
+<div id="loading-overlay">
+  <canvas class="matrix" id="matrixCanvas"></canvas>
+  <div class="rgb-glitch" data-text="Loading virus assets...">Loading virus assets...</div>
+  <div class="hacked">⚠ SYSTEM HACKED ⚠</div>
+</div>
 
-  <div class="menu" id="prank-menu">
-    <!-- Links werden hier eingefügt -->
-  </div>
-  <button class="shuffle-btn" onclick="shuffleLinks()">🔀 Shuffle!</button>
+<div class="menu" id="prank-menu"></div>
+<button class="shuffle-btn" onclick="shuffleLinks()">🔀 Shuffle!</button>
 
-  <div class="title">🔥 Originake Storlinked WiFi 🔥</div>
+<div class="title">🔥 Originake Storlinked WiFi 🔥</div>
 
-  <div class="box">
-    <p><strong>"This is best free wifie u cold find on internete a It z soo hig qulity that ur handi wil explode 
-    !!! trei now!!  -delon musk"</strong></p>
-    <p class="quote">– DEbun Mungle (Original)</p>
-    <p>✅ Delon approved</p>
-    <p>🛰️ Only on onlycars the new uncyber truck</p>
-    <p>🚗 Temo with frii wifie</p>
-  </div>
+<div class="box">
+<p><strong>"This is best free wifie u cold find!!!"</strong></p>
+</div>
 
-  <a href="https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1" target="_blank" onclick="incrementDownloadCount()">
-    <button class="download-btn">⬇️ DownLoD ⬇️</button>
-  </a>
+<a href="https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1" target="_blank" onclick="incrementDownloadCount()">
+<button class="download-btn">⬇️ DownLoD ⬇️</button>
+</a>
 
-  <p id="download-counter" class="counter">📊 Downloads so far: loading...</p>
+<p id="download-counter" class="counter">📊 Downloads so far: loading...</p>
 
-  <p class="quote">Check us out on ther Vision Esportin</p>
+<script>
 
-  <script>
-    const prankLinks = [
-      { url: "https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1", label: "🎵 Rickroll" },
-      { url: "https://fakeupdate.net/win10/", label: "🖥️ Windows Update" },
-      { url: "https://pointerpointer.com/", label: "🤑 Gewinnspiel" },
-      { url: "https://omfgdogs.com/", label: "🐶 Hunde-Party" },
-      { url: "https://theuselessweb.com/", label: "🌀 Useless Button" },
-      { url: "https://endless.horse/", label: "🐴 Endless Horse" },
-      { url: "https://heeeeeeeey.com/", label: "🎤 Heeeey!" },
-      { url: "https://ninjaflex.com/", label: "🥷 Ninja Flex" },
-      { url: "https://cat-bounce.com/", label: "🐱 Cat Bounce" },
-      { url: "https://corndog.io/", label: "🌽 Corndog" },
-      { url: "https://zoomquilt.org/", label: "🔍 Zoomquilt" },
-      { url: "https://staggeringbeauty.com/", label: "💃 Staggering Beauty" },
-      { url: "https://longdogechallenge.com/", label: "🐕 Long Doge Challenge" },
-      { url: "https://www.patience-is-a-virtue.org/", label: "⏳ Patience Game" },
-      { url: "https://thatsthefinger.com/", label: "🖕 The Finger" },
-      { url: "https://isitchristmas.com/", label: "🎄 Christmas?" },
-      { url: "https://trypap.com/", label: "✍️ Passive Aggressive Passwords" },
-      { url: "https://www.rrrgggbbb.com/", label: "🌈 RGB Madness" },
-      { url: "https://beesbeesbees.com/", label: "🐝 Bees Everywhere" },
-      { url: "https://chrismckenzie.com/", label: "👀 Creepy Blink" },
-      { url: "https://www.koalastothemax.com/", label: "🧩 Koalas to the Max" },
-      { url: "https://leekspin.com/", label: "🌀 Leekspin" },
-      { url: "https://www.donothingfor2minutes.com/", label: "😌 Zen Timer" },
-      { url: "https://pixelsfighting.com/", label: "🧱 Pixels Fighting" },
-      { url: "https://eelslap.com/", label: "🐟 Slap with an Eel" },
-      { url: "https://www.ismycomputeron.com/", label: "💻 Is My Computer On?" },
-      { url: "https://whatsmystarbucksname.com/", label: "☕ Starbucks Name?" },
-      { url: "https://shadyurl.com/", label: "🔗 Shady URL Generator" },
-      { url: "https://zombo.com/", label: "🌐 ZomboCom" },
-      { url: "https://thisissand.com/", label: "🏖️ Sand Art" },
-      { url: "https://hasthelargehadroncolliderdestroyedtheworldyet.com/", label: "💥 LHC Check" },
-      { url: "https://drawastickman.com/", label: "✏️ Draw a Stickman" },
-      { url: "https://burymewithmymoney.com/", label: "💸 Bury Me with $" },
-      { url: "https://corgiorgy.com/", label: "🐶 Corgi Orgy" },
-      { url: "https://notsend.com/", label: "📧 Not Send Email" },
-      { url: "https://www.ringingtelephone.com/", label: "☎️ Ring Ring!" },
-      { url: "https://www.hackertyper.com/", label: "👨‍💻 Hacker Typer" },
-      { url: "https://smashthewalls.com/", label: "💥 Smash the Walls" },
-      { url: "https://fallingfalling.com/", label: "🌈 Soundfall" },
-      { url: "https://partridgegetitdone.com/", label: "🕺 Partridge Gets it Done" },
-      { url: "https://bouncingdvdlogo.com/", label: "📀 Bouncing DVD" },
-      { url: "https://you.regettingold.com/", label: "🎂 You're Getting Old" },
-      { url: "https://nooooooooooooooo.com/", label: "⚠️ NOOOOOO!" },
-      { url: "https://www.wooooooo.me/", label: "👻 Wooooooo" },
-      { url: "https://spaceis.cool/", label: "🚀 Space Is Cool" },
-      { url: "https://unicornify.pictures/", label: "🦄 Unicornify Everything" },
-      { url: "https://www.fallingguy.com/", label: "🧍 Falling Guy" },
-      { url: "https://crouton.net/", label: "🥖 Crouton Party" },
-      { url: "https://internetlivestats.com/", label: "📈 Live Internet Stats" },
-      { url: "https://www.digicert.com/help/", label: "🔍 SSL Lookup (Fake)" },
-      { url: "https://bluedonut.net/", label: "🍩 Blue Donut Spin" },
-      { url: "https://therevolvinginternet.com/", label: "🌐 Rotating Internet" },
-      { url: "https://clickingbad.nullism.com/", label: "🧪 Clicking Bad" },
-      { url: "https://ncase.me/door/", label: "🚪 The Door" },
-      { url: "https://everydayim.com/", label: "🕺 Everyday I'm..." },
-      { url: "https://www.trashloop.com/", label: "🗑️ Trash Loop" },
-      { url: "https://www.sanger.dk/", label: "🐓 Singing Chicken" },
-      { url: "https://www.purple.com/", label: "🟣 Just Purple" },
-      { url: "https://republiquedesmangues.fr/", label: "🥭 République des Mangues" },
-      { url: "https://thezen.zone/", label: "🧘 Zen Zone" },
-      { url: "https://sometimesredsometimesblue.com/", label: "🔴🔵 Mood Button" },
-      { url: "https://www.yesnoif.com/", label: "❓ Yes / No / If" },
-      { url: "https://thispersondoesnotexist.com/", label: "🧑‍🎨 Fake People" },
-      { url: "https://shutupandtakemymoney.com/", label: "💸 Take My Money!" },
-      { url: "https://fartscroll.com/", label: "💨 Fart Scroll" },
-      { url: "https://yeahlemons.com/", label: "🍋 Lemons?" },
-      { url: "https://procatinator.com/", label: "🎧 Cat + Music" },
-      { url: "https://ducksarethebest.com/", label: "🦆 Ducks are Best" },
-      { url: "https://tickleachicken.com/", label: "🐔 Tickle a Chicken" },
-      { url: "https://icanstill.io/", label: "💪 You Can Still Do It" },
-      { url: "https://www.riddlydiddly.com/", label: "🤪 Riddly Diddly" },
-      { url: "https://alwaysjudgeabookbyitscover.com/", label: "📚 Book Cover Game" },
-      { url: "https://youtubemultiplier.com/", label: "📺 YouTube Mayhem" },
-      { url: "https://www.nyan.cat/", label: "🌈 Nyan Cat" },
-      { url: "https://www.theworldsworstwebsiteever.com/", label: "🤢 World's Worst Website" },
-      { url: "https://zoom.coffee/", label: "☕ Zoom Coffee!" },
-      { url: "https://po.ta.to/", label: "🥔 Po-ta-to" },
-      { url: "https://mondrianandme.com/", label: "🟥 Mondrian Grid" },
-      { url: "https://www.findtheinvisiblecow.com/", label: "🐄 Invisible Cow" },
-      { url: "https://explodingheads.co.uk/", label: "💥 Exploding Heads" },
-      { url: "https://www.eyebleach.me/", label: "🧼 Eyebleach" },
-      { url: "https://www.howmanypeopleareinspacerightnow.com/", label: "👨‍🚀 In Space Now?" }
-    ];
+/* ========================= */
+/* 🟢 MATRIX RAIN 🟢 */
+/* ========================= */
 
-    function getRandomItems(arr, count) {
-      const shuffled = arr.slice().sort(() => 0.5 - Math.random());
-      return shuffled.slice(0, count);
-    }
+const canvas=document.getElementById("matrixCanvas");
+const ctx=canvas.getContext("2d");
+canvas.height=window.innerHeight;
+canvas.width=window.innerWidth;
 
-    function shuffleLinks() {
-      const menu = document.getElementById("prank-menu");
-      menu.innerHTML = "";
+const letters="01";
+const fontSize=16;
+const columns=canvas.width/fontSize;
+const drops=[];
 
-      const selected = getRandomItems(prankLinks, 4);
-      selected.forEach(link => {
-        const a = document.createElement("a");
-        a.href = link.url;
-        a.target = "_blank";
-        a.textContent = link.label;
-        menu.appendChild(a);
-      });
-    }
+for(let x=0;x<columns;x++) drops[x]=1;
 
-    window.addEventListener("DOMContentLoaded", shuffleLinks);
-  </script>
+function drawMatrix(){
+  ctx.fillStyle="rgba(0,0,0,0.05)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle="#0f0";
+  ctx.font=fontSize+"px monospace";
+
+  for(let i=0;i<drops.length;i++){
+    const text=letters[Math.floor(Math.random()*letters.length)];
+    ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+    if(drops[i]*fontSize>canvas.height && Math.random()>0.975)
+      drops[i]=0;
+    drops[i]++;
+  }
+}
+setInterval(drawMatrix,33);
+
+/* ========================= */
+/* 🔀 COMPLETE LINK LIST 🔀 */
+/* ========================= */
+
+const prankLinks = [
+{ url:"https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1",label:"🎵 Rickroll"},
+{ url:"https://fakeupdate.net/win10/",label:"🖥️ Windows Update"},
+{ url:"https://pointerpointer.com/",label:"🤑 Gewinnspiel"},
+{ url:"https://omfgdogs.com/",label:"🐶 Hunde-Party"},
+{ url:"https://theuselessweb.com/",label:"🌀 Useless Button"},
+{ url:"https://endless.horse/",label:"🐴 Endless Horse"},
+{ url:"https://heeeeeeeey.com/",label:"🎤 Heeeey!"},
+{ url:"https://ninjaflex.com/",label:"🥷 Ninja Flex"},
+{ url:"https://cat-bounce.com/",label:"🐱 Cat Bounce"},
+{ url:"https://corndog.io/",label:"🌽 Corndog"},
+{ url:"https://zoomquilt.org/",label:"🔍 Zoomquilt"},
+{ url:"https://staggeringbeauty.com/",label:"💃 Staggering Beauty"},
+{ url:"https://longdogechallenge.com/",label:"🐕 Long Doge Challenge"},
+{ url:"https://www.patience-is-a-virtue.org/",label:"⏳ Patience Game"},
+{ url:"https://thatsthefinger.com/",label:"🖕 The Finger"},
+{ url:"https://isitchristmas.com/",label:"🎄 Christmas?"},
+{ url:"https://trypap.com/",label:"✍️ Passive Aggressive Passwords"},
+{ url:"https://www.rrrgggbbb.com/",label:"🌈 RGB Madness"},
+{ url:"https://beesbeesbees.com/",label:"🐝 Bees Everywhere"},
+{ url:"https://chrismckenzie.com/",label:"👀 Creepy Blink"},
+{ url:"https://www.koalastothemax.com/",label:"🧩 Koalas to the Max"},
+{ url:"https://leekspin.com/",label:"🌀 Leekspin"},
+{ url:"https://www.donothingfor2minutes.com/",label:"😌 Zen Timer"},
+{ url:"https://pixelsfighting.com/",label:"🧱 Pixels Fighting"},
+{ url:"https://eelslap.com/",label:"🐟 Slap with an Eel"},
+{ url:"https://www.ismycomputeron.com/",label:"💻 Is My Computer On?"},
+{ url:"https://whatsmystarbucksname.com/",label:"☕ Starbucks Name?"},
+{ url:"https://shadyurl.com/",label:"🔗 Shady URL Generator"},
+{ url:"https://zombo.com/",label:"🌐 ZomboCom"},
+{ url:"https://thisissand.com/",label:"🏖️ Sand Art"},
+{ url:"https://hasthelargehadroncolliderdestroyedtheworldyet.com/",label:"💥 LHC Check"},
+{ url:"https://drawastickman.com/",label:"✏️ Draw a Stickman"},
+{ url:"https://burymewithmymoney.com/",label:"💸 Bury Me with $"},
+{ url:"https://corgiorgy.com/",label:"🐶 Corgi Orgy"},
+{ url:"https://notsend.com/",label:"📧 Not Send Email"},
+{ url:"https://www.ringingtelephone.com/",label:"☎️ Ring Ring!"},
+{ url:"https://www.hackertyper.com/",label:"👨‍💻 Hacker Typer"},
+{ url:"https://smashthewalls.com/",label:"💥 Smash the Walls"},
+{ url:"https://fallingfalling.com/",label:"🌈 Soundfall"},
+{ url:"https://partridgegetitdone.com/",label:"🕺 Partridge Gets it Done"},
+{ url:"https://bouncingdvdlogo.com/",label:"📀 Bouncing DVD"},
+{ url:"https://you.regettingold.com/",label:"🎂 You're Getting Old"},
+{ url:"https://nooooooooooooooo.com/",label:"⚠️ NOOOOOO!"},
+{ url:"https://www.wooooooo.me/",label:"👻 Wooooooo"},
+{ url:"https://spaceis.cool/",label:"🚀 Space Is Cool"},
+{ url:"https://unicornify.pictures/",label:"🦄 Unicornify Everything"},
+{ url:"https://www.fallingguy.com/",label:"🧍 Falling Guy"},
+{ url:"https://crouton.net/",label:"🥖 Crouton Party"},
+{ url:"https://internetlivestats.com/",label:"📈 Live Internet Stats"},
+{ url:"https://bluedonut.net/",label:"🍩 Blue Donut Spin"},
+{ url:"https://therevolvinginternet.com/",label:"🌐 Rotating Internet"},
+{ url:"https://clickingbad.nullism.com/",label:"🧪 Clicking Bad"},
+{ url:"https://ncase.me/door/",label:"🚪 The Door"},
+{ url:"https://everydayim.com/",label:"🕺 Everyday I'm..."},
+{ url:"https://www.trashloop.com/",label:"🗑️ Trash Loop"},
+{ url:"https://www.sanger.dk/",label:"🐓 Singing Chicken"},
+{ url:"https://www.purple.com/",label:"🟣 Just Purple"},
+{ url:"https://republiquedesmangues.fr/",label:"🥭 République des Mangues"},
+{ url:"https://thezen.zone/",label:"🧘 Zen Zone"},
+{ url:"https://sometimesredsometimesblue.com/",label:"🔴🔵 Mood Button"},
+{ url:"https://www.yesnoif.com/",label:"❓ Yes / No / If"},
+{ url:"https://thispersondoesnotexist.com/",label:"🧑‍🎨 Fake People"},
+{ url:"https://shutupandtakemymoney.com/",label:"💸 Take My Money!"},
+{ url:"https://fartscroll.com/",label:"💨 Fart Scroll"},
+{ url:"https://yeahlemons.com/",label:"🍋 Lemons?"},
+{ url:"https://procatinator.com/",label:"🎧 Cat + Music"},
+{ url:"https://ducksarethebest.com/",label:"🦆 Ducks are Best"},
+{ url:"https://tickleachicken.com/",label:"🐔 Tickle a Chicken"},
+{ url:"https://icanstill.io/",label:"💪 You Can Still Do It"},
+{ url:"https://www.riddlydiddly.com/",label:"🤪 Riddly Diddly"},
+{ url:"https://alwaysjudgeabookbyitscover.com/",label:"📚 Book Cover Game"},
+{ url:"https://youtubemultiplier.com/",label:"📺 YouTube Mayhem"},
+{ url:"https://www.nyan.cat/",label:"🌈 Nyan Cat"},
+{ url:"https://www.theworldsworstwebsiteever.com/",label:"🤢 World's Worst Website"},
+{ url:"https://zoom.coffee/",label:"☕ Zoom Coffee!"},
+{ url:"https://po.ta.to/",label:"🥔 Po-ta-to"},
+{ url:"https://mondrianandme.com/",label:"🟥 Mondrian Grid"},
+{ url:"https://www.findtheinvisiblecow.com/",label:"🐄 Invisible Cow"},
+{ url:"https://explodingheads.co.uk/",label:"💥 Exploding Heads"},
+{ url:"https://www.eyebleach.me/",label:"🧼 Eyebleach"},
+{ url:"https://www.howmanypeopleareinspacerightnow.com/",label:"👨‍🚀 In Space Now?"}
+];
+
+function shuffleLinks(){
+  const menu=document.getElementById("prank-menu");
+  menu.innerHTML="";
+  const shuffled=prankLinks.sort(()=>0.5-Math.random()).slice(0,6);
+  shuffled.forEach(link=>{
+    const a=document.createElement("a");
+    a.href=link.url;
+    a.target="_blank";
+    a.textContent=link.label;
+    menu.appendChild(a);
+  });
+}
+
+window.addEventListener("DOMContentLoaded",shuffleLinks);
+
+</script>
 
 </body>
 </html>
