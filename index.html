@@ -8,134 +8,104 @@
 <style>
 
 /* ========================= */
-/* 💀 LOADING CHAOS 💀 */
+/* 🟢 TERMINAL START 🟢 */
 /* ========================= */
 
 #loading-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   background: black;
   color: #00ff00;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   font-family: monospace;
-  font-size: 3rem;
+  padding: 40px;
   z-index: 9999;
   overflow: hidden;
+}
+
+.terminal-line {
+  margin-bottom: 5px;
+  animation: type 0.5s steps(40,end);
+}
+
+@keyframes type {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ========================= */
+/* 🔴 RGB GLITCH (END ONLY) 🔴 */
+/* ========================= */
+
+.rgb-mode {
   animation: screenShake 0.2s infinite;
 }
 
-.rgb-glitch {
-  position: relative;
-  animation: glitchFlicker 0.3s infinite;
-}
-
-.rgb-glitch::before,
-.rgb-glitch::after {
+.rgb-mode::before,
+.rgb-mode::after {
   content: attr(data-text);
   position: absolute;
   left: 0;
-  top: 0;
 }
 
-.rgb-glitch::before {
-  color: red;
-  transform: translate(-2px, 0);
-}
-
-.rgb-glitch::after {
-  color: blue;
-  transform: translate(2px, 0);
-}
-
-@keyframes glitchFlicker {
-  0% { opacity: 1; }
-  50% { opacity: 0.8; }
-  100% { opacity: 1; }
-}
+.rgb-mode::before { color: red; transform: translate(-3px,0); }
+.rgb-mode::after { color: blue; transform: translate(3px,0); }
 
 @keyframes screenShake {
-  0% { transform: translate(0px,0px); }
-  25% { transform: translate(2px,-2px); }
-  50% { transform: translate(-2px,2px); }
-  75% { transform: translate(2px,2px); }
-  100% { transform: translate(0px,0px); }
-}
-
-.matrix {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.hacked {
-  position: absolute;
-  bottom: 10%;
-  color: red;
-  font-size: 2rem;
-  animation: blink 0.5s infinite;
-}
-
-@keyframes blink {
-  50% { opacity: 0; }
+  0%{transform:translate(0,0)}
+  25%{transform:translate(3px,-3px)}
+  50%{transform:translate(-3px,3px)}
+  75%{transform:translate(3px,3px)}
+  100%{transform:translate(0,0)}
 }
 
 /* ========================= */
-/* 🎨 NORMAL PAGE 🎨 */
+/* 🔵 CRASH SCREEN 🔵 */
 /* ========================= */
 
-body {
-  font-family: Comic Sans MS, cursive, sans-serif;
-  background: #fdf6e3;
-  text-align: center;
-  padding: 2rem;
+#crash-screen {
+  position: fixed;
+  width:100%;
+  height:100%;
+  background:#0000aa;
+  color:white;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  font-family: monospace;
+  font-size:1.5rem;
+  z-index:10000;
 }
 
-.menu {
-  background: linear-gradient(45deg,#ff00cc,#3333ff);
+/* ========================= */
+/* NORMAL PAGE */
+/* ========================= */
+
+body{
+  font-family: Comic Sans MS;
+  text-align:center;
+  padding:2rem;
+  background:#fdf6e3;
+}
+
+.menu{
+  background:linear-gradient(45deg,#ff00cc,#3333ff);
   padding:1rem;
   border-radius:15px;
-  margin-bottom:2rem;
 }
 
-.menu a {
+.menu a{
   color:white;
   margin:0 1rem;
-  font-weight:bold;
   text-decoration:none;
-}
-
-.shuffle-btn {
-  background:#3333ff;
-  color:white;
-  border:none;
-  padding:0.5rem 1rem;
-  border-radius:10px;
-  cursor:pointer;
-}
-
-.title {
-  font-size:3rem;
   font-weight:bold;
 }
 
-.box {
-  border:3px dashed #555;
-  padding:1.5rem;
-  margin:2rem auto;
-  max-width:600px;
-  background:white;
-  border-radius:10px;
-}
-
-.download-btn {
+.download-btn{
   font-size:2rem;
   padding:1rem 2rem;
+  margin-top:2rem;
   background:linear-gradient(45deg,#ff00cc,#3333ff);
   color:white;
   border:none;
@@ -143,9 +113,7 @@ body {
   cursor:pointer;
 }
 
-.counter {
-  margin-top:1rem;
-}
+.counter{margin-top:1rem;}
 
 </style>
 
@@ -163,181 +131,161 @@ const firebaseConfig = {
   appId: "1:736075919328:web:c0f4374192df63be8c8585"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const countRef = ref(db,'downloads/count');
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+const countRef=ref(db,'downloads/count');
 
 function incrementDownloadCount(){
-  runTransaction(countRef,(val)=>(val||0)+1);
+  runTransaction(countRef,(v)=>(v||0)+1);
 }
 window.incrementDownloadCount=incrementDownloadCount;
 
 window.addEventListener("DOMContentLoaded",()=>{
-
   const counter=document.getElementById("download-counter");
   onValue(countRef,(snap)=>{
     counter.textContent="📊 Downloads so far: "+(snap.val()||0);
   });
-
-  setTimeout(()=>{
-    document.getElementById("loading-overlay").style.display="none";
-  },6000);
-
 });
 </script>
 
 </head>
-
 <body>
 
-<div id="loading-overlay">
-  <canvas class="matrix" id="matrixCanvas"></canvas>
-  <div class="rgb-glitch" data-text="Loading virus assets...">Loading virus assets...</div>
-  <div class="hacked">⚠ SYSTEM HACKED ⚠</div>
+<div id="loading-overlay"></div>
+
+<div id="crash-screen">
+<div>
+<h1>:(</h1>
+<p>Your system ran into a critical problem.</p>
+<p>Error Code: WIFI_ORIGINAKE_FAILURE</p>
+<p>Collecting data... 100%</p>
+<p>System shutting down...</p>
+</div>
 </div>
 
 <div class="menu" id="prank-menu"></div>
-<button class="shuffle-btn" onclick="shuffleLinks()">🔀 Shuffle!</button>
-
-<div class="title">🔥 Originake Storlinked WiFi 🔥</div>
-
-<div class="box">
-<p><strong>"This is best free wifie u cold find!!!"<br>"This WiFi has been officially proven to be the best, nott made by scamers"<br>"Delon muskel actualy said yes to tis!!!"</strong></p>
-</div>
+<h1>🔥 Originake Storlinked WiFi 🔥</h1>
 
 <a href="https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1" target="_blank" onclick="incrementDownloadCount()">
 <button class="download-btn">⬇️ DownLoD ⬇️</button>
 </a>
 
-<p id="download-counter" class="counter">📊 Downloads so far: loading...</p>
+<p id="download-counter" class="counter">📊 loading...</p>
 
 <script>
 
 /* ========================= */
-/* 🟢 MATRIX RAIN 🟢 */
+/* TERMINAL SEQUENCE */
 /* ========================= */
 
-const canvas=document.getElementById("matrixCanvas");
-const ctx=canvas.getContext("2d");
-canvas.height=window.innerHeight;
-canvas.width=window.innerWidth;
+const overlay=document.getElementById("loading-overlay");
 
-const letters="01";
-const fontSize=16;
-const columns=canvas.width/fontSize;
-const drops=[];
+const lines=[
+"Booting Originake WiFi Injector v9.6...",
+"Establishing secure darknet tunnel...",
+"Bypassing firewall...",
+"Injecting free WiFi packets...",
+"Granting admin privileges...",
+"WARNING: unstable network core detected",
+"Preparing exploit payload..."
+];
 
-for(let x=0;x<columns;x++) drops[x]=1;
+let i=0;
 
-function drawMatrix(){
-  ctx.fillStyle="rgba(0,0,0,0.05)";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle="#0f0";
-  ctx.font=fontSize+"px monospace";
-
-  for(let i=0;i<drops.length;i++){
-    const text=letters[Math.floor(Math.random()*letters.length)];
-    ctx.fillText(text,i*fontSize,drops[i]*fontSize);
-    if(drops[i]*fontSize>canvas.height && Math.random()>0.975)
-      drops[i]=0;
-    drops[i]++;
+function addLine(){
+  if(i<lines.length){
+    const div=document.createElement("div");
+    div.className="terminal-line";
+    div.textContent=lines[i];
+    overlay.appendChild(div);
+    i++;
+    setTimeout(addLine,600);
+  }else{
+    midPhase();
   }
 }
-setInterval(drawMatrix,33);
+
+addLine();
 
 /* ========================= */
-/* 🔀 COMPLETE LINK LIST 🔀 */
+/* MID PHASE POPUPS */
 /* ========================= */
 
-const prankLinks = [
-{ url:"https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1",label:"🎵 Rickroll"},
-{ url:"https://fakeupdate.net/win10/",label:"🖥️ Windows Update"},
-{ url:"https://pointerpointer.com/",label:"🤑 Gewinnspiel"},
-{ url:"https://omfgdogs.com/",label:"🐶 Hunde-Party"},
-{ url:"https://theuselessweb.com/",label:"🌀 Useless Button"},
-{ url:"https://endless.horse/",label:"🐴 Endless Horse"},
-{ url:"https://heeeeeeeey.com/",label:"🎤 Heeeey!"},
-{ url:"https://ninjaflex.com/",label:"🥷 Ninja Flex"},
-{ url:"https://cat-bounce.com/",label:"🐱 Cat Bounce"},
-{ url:"https://corndog.io/",label:"🌽 Corndog"},
-{ url:"https://zoomquilt.org/",label:"🔍 Zoomquilt"},
-{ url:"https://staggeringbeauty.com/",label:"💃 Staggering Beauty"},
-{ url:"https://longdogechallenge.com/",label:"🐕 Long Doge Challenge"},
-{ url:"https://www.patience-is-a-virtue.org/",label:"⏳ Patience Game"},
-{ url:"https://thatsthefinger.com/",label:"🖕 The Finger"},
-{ url:"https://isitchristmas.com/",label:"🎄 Christmas?"},
-{ url:"https://trypap.com/",label:"✍️ Passive Aggressive Passwords"},
-{ url:"https://www.rrrgggbbb.com/",label:"🌈 RGB Madness"},
-{ url:"https://beesbeesbees.com/",label:"🐝 Bees Everywhere"},
-{ url:"https://chrismckenzie.com/",label:"👀 Creepy Blink"},
-{ url:"https://www.koalastothemax.com/",label:"🧩 Koalas to the Max"},
-{ url:"https://leekspin.com/",label:"🌀 Leekspin"},
-{ url:"https://www.donothingfor2minutes.com/",label:"😌 Zen Timer"},
-{ url:"https://pixelsfighting.com/",label:"🧱 Pixels Fighting"},
-{ url:"https://eelslap.com/",label:"🐟 Slap with an Eel"},
-{ url:"https://www.ismycomputeron.com/",label:"💻 Is My Computer On?"},
-{ url:"https://whatsmystarbucksname.com/",label:"☕ Starbucks Name?"},
-{ url:"https://shadyurl.com/",label:"🔗 Shady URL Generator"},
-{ url:"https://zombo.com/",label:"🌐 ZomboCom"},
-{ url:"https://thisissand.com/",label:"🏖️ Sand Art"},
-{ url:"https://hasthelargehadroncolliderdestroyedtheworldyet.com/",label:"💥 LHC Check"},
-{ url:"https://drawastickman.com/",label:"✏️ Draw a Stickman"},
-{ url:"https://burymewithmymoney.com/",label:"💸 Bury Me with $"},
-{ url:"https://corgiorgy.com/",label:"🐶 Corgi Orgy"},
-{ url:"https://notsend.com/",label:"📧 Not Send Email"},
-{ url:"https://www.ringingtelephone.com/",label:"☎️ Ring Ring!"},
-{ url:"https://www.hackertyper.com/",label:"👨‍💻 Hacker Typer"},
-{ url:"https://smashthewalls.com/",label:"💥 Smash the Walls"},
-{ url:"https://fallingfalling.com/",label:"🌈 Soundfall"},
-{ url:"https://partridgegetitdone.com/",label:"🕺 Partridge Gets it Done"},
-{ url:"https://bouncingdvdlogo.com/",label:"📀 Bouncing DVD"},
-{ url:"https://you.regettingold.com/",label:"🎂 You're Getting Old"},
-{ url:"https://nooooooooooooooo.com/",label:"⚠️ NOOOOOO!"},
-{ url:"https://www.wooooooo.me/",label:"👻 Wooooooo"},
-{ url:"https://spaceis.cool/",label:"🚀 Space Is Cool"},
-{ url:"https://unicornify.pictures/",label:"🦄 Unicornify Everything"},
-{ url:"https://www.fallingguy.com/",label:"🧍 Falling Guy"},
-{ url:"https://crouton.net/",label:"🥖 Crouton Party"},
-{ url:"https://internetlivestats.com/",label:"📈 Live Internet Stats"},
-{ url:"https://bluedonut.net/",label:"🍩 Blue Donut Spin"},
-{ url:"https://therevolvinginternet.com/",label:"🌐 Rotating Internet"},
-{ url:"https://clickingbad.nullism.com/",label:"🧪 Clicking Bad"},
-{ url:"https://ncase.me/door/",label:"🚪 The Door"},
-{ url:"https://everydayim.com/",label:"🕺 Everyday I'm..."},
-{ url:"https://www.trashloop.com/",label:"🗑️ Trash Loop"},
-{ url:"https://www.sanger.dk/",label:"🐓 Singing Chicken"},
-{ url:"https://www.purple.com/",label:"🟣 Just Purple"},
-{ url:"https://republiquedesmangues.fr/",label:"🥭 République des Mangues"},
-{ url:"https://thezen.zone/",label:"🧘 Zen Zone"},
-{ url:"https://sometimesredsometimesblue.com/",label:"🔴🔵 Mood Button"},
-{ url:"https://www.yesnoif.com/",label:"❓ Yes / No / If"},
-{ url:"https://thispersondoesnotexist.com/",label:"🧑‍🎨 Fake People"},
-{ url:"https://shutupandtakemymoney.com/",label:"💸 Take My Money!"},
-{ url:"https://fartscroll.com/",label:"💨 Fart Scroll"},
-{ url:"https://yeahlemons.com/",label:"🍋 Lemons?"},
-{ url:"https://procatinator.com/",label:"🎧 Cat + Music"},
-{ url:"https://ducksarethebest.com/",label:"🦆 Ducks are Best"},
-{ url:"https://tickleachicken.com/",label:"🐔 Tickle a Chicken"},
-{ url:"https://icanstill.io/",label:"💪 You Can Still Do It"},
-{ url:"https://www.riddlydiddly.com/",label:"🤪 Riddly Diddly"},
-{ url:"https://alwaysjudgeabookbyitscover.com/",label:"📚 Book Cover Game"},
-{ url:"https://youtubemultiplier.com/",label:"📺 YouTube Mayhem"},
-{ url:"https://www.nyan.cat/",label:"🌈 Nyan Cat"},
-{ url:"https://www.theworldsworstwebsiteever.com/",label:"🤢 World's Worst Website"},
-{ url:"https://zoom.coffee/",label:"☕ Zoom Coffee!"},
-{ url:"https://po.ta.to/",label:"🥔 Po-ta-to"},
-{ url:"https://mondrianandme.com/",label:"🟥 Mondrian Grid"},
-{ url:"https://www.findtheinvisiblecow.com/",label:"🐄 Invisible Cow"},
-{ url:"https://explodingheads.co.uk/",label:"💥 Exploding Heads"},
-{ url:"https://www.eyebleach.me/",label:"🧼 Eyebleach"},
-{ url:"https://www.howmanypeopleareinspacerightnow.com/",label:"👨‍🚀 In Space Now?"}
+function midPhase(){
+
+  setTimeout(()=>{
+    alert("⚠ Network instability detected!");
+    alert("⚠ Critical vulnerability found!");
+  },1500);
+
+  setTimeout(()=>{
+    overlay.classList.add("rgb-mode");
+    overlay.setAttribute("data-text","SYSTEM OVERRIDE");
+    overlay.innerHTML="<h1>SYSTEM OVERRIDE</h1>";
+  },4000);
+
+  setTimeout(()=>{
+    crash();
+  },6500);
+}
+
+/* ========================= */
+/* CRASH */
+/* ========================= */
+
+function crash(){
+  overlay.style.display="none";
+  document.getElementById("crash-screen").style.display="flex";
+}
+
+/* ========================= */
+/* COMPLETE LINK LIST */
+/* ========================= */
+
+const prankLinks=[
+{url:"https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1",label:"🎵 Rickroll"},
+{url:"https://fakeupdate.net/win10/",label:"🖥️ Windows Update"},
+{url:"https://pointerpointer.com/",label:"🤑 Gewinnspiel"},
+{url:"https://omfgdogs.com/",label:"🐶 Hunde-Party"},
+{url:"https://theuselessweb.com/",label:"🌀 Useless Button"},
+{url:"https://endless.horse/",label:"🐴 Endless Horse"},
+{url:"https://heeeeeeeey.com/",label:"🎤 Heeeey!"},
+{url:"https://ninjaflex.com/",label:"🥷 Ninja Flex"},
+{url:"https://cat-bounce.com/",label:"🐱 Cat Bounce"},
+{url:"https://corndog.io/",label:"🌽 Corndog"},
+{url:"https://zoomquilt.org/",label:"🔍 Zoomquilt"},
+{url:"https://staggeringbeauty.com/",label:"💃 Staggering Beauty"},
+{url:"https://longdogechallenge.com/",label:"🐕 Long Doge Challenge"},
+{url:"https://www.patience-is-a-virtue.org/",label:"⏳ Patience Game"},
+{url:"https://thatsthefinger.com/",label:"🖕 The Finger"},
+{url:"https://isitchristmas.com/",label:"🎄 Christmas?"},
+{url:"https://trypap.com/",label:"✍️ Passive Aggressive Passwords"},
+{url:"https://www.rrrgggbbb.com/",label:"🌈 RGB Madness"},
+{url:"https://beesbeesbees.com/",label:"🐝 Bees Everywhere"},
+{url:"https://chrismckenzie.com/",label:"👀 Creepy Blink"},
+{url:"https://www.koalastothemax.com/",label:"🧩 Koalas to the Max"},
+{url:"https://leekspin.com/",label:"🌀 Leekspin"},
+{url:"https://www.donothingfor2minutes.com/",label:"😌 Zen Timer"},
+{url:"https://pixelsfighting.com/",label:"🧱 Pixels Fighting"},
+{url:"https://eelslap.com/",label:"🐟 Slap with an Eel"},
+{url:"https://www.ismycomputeron.com/",label:"💻 Is My Computer On?"},
+{url:"https://whatsmystarbucksname.com/",label:"☕ Starbucks Name?"},
+{url:"https://shadyurl.com/",label:"🔗 Shady URL Generator"},
+{url:"https://zombo.com/",label:"🌐 ZomboCom"},
+{url:"https://thisissand.com/",label:"🏖️ Sand Art"},
+{url:"https://hasthelargehadroncolliderdestroyedtheworldyet.com/",label:"💥 LHC Check"},
+{url:"https://drawastickman.com/",label:"✏️ Draw a Stickman"},
+{url:"https://burymewithmymoney.com/",label:"💸 Bury Me with $"},
+{url:"https://corgiorgy.com/",label:"🐶 Corgi Orgy"},
+{url:"https://notsend.com/",label:"📧 Not Send Email"},
+{url:"https://www.ringingtelephone.com/",label:"☎️ Ring Ring!"},
+{url:"https://www.hackertyper.com/",label:"👨‍💻 Hacker Typer"}
 ];
 
 function shuffleLinks(){
   const menu=document.getElementById("prank-menu");
   menu.innerHTML="";
-  const shuffled=prankLinks.sort(()=>0.5-Math.random()).slice(0,6);
-  shuffled.forEach(link=>{
+  prankLinks.sort(()=>0.5-Math.random()).slice(0,6).forEach(link=>{
     const a=document.createElement("a");
     a.href=link.url;
     a.target="_blank";
