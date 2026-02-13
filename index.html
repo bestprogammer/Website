@@ -3,94 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 Originake Storlinked WiFi 🔥</title>
+    <title>My Prank Website</title>
     <style>
-        body { margin: 0; font-family: Arial, sans-serif; overflow: hidden; }
-        #loading {
+        /* Loading screen styles */
+        #loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: black;
-            color: #00ff00;
+            background: rgba(255, 255, 255, 0.9);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 2rem;
-        }
-        #prank {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        @keyframes glitch {
-            0% { clip-path: inset(0 0 0 0); }
-            10% { clip-path: inset(25% 0 75% 0); }
-            20% { clip-path: inset(0 0 0 0); }
-            30% { clip-path: inset(50% 0 50% 0); }
-            40% { clip-path: inset(0 0 0 0); }
-            50% { clip-path: inset(25% 0 75% 0); }
-            60% { clip-path: inset(0 0 0 0); }
-            100% { clip-path: inset(0 0 0 0); }
-        }
-        .glitch { animation: glitch 1s infinite; }
-        .scanline {
-            position: absolute;
-            top: 0;
-            height: 100%;
-            pointer-events: none;
-            background: rgba(0, 0, 0, 0.05);
-            background-image: repeating-linear-gradient(
-                rgba(255, 255, 255, 0.1) 0,
-                rgba(255, 255, 255, 0.1) 1px,
-                transparent 1px,
-                transparent 2px
-            );
-            animation: scanline 0.1s linear infinite;
-        }
-        @keyframes scanline {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-10px); }
+            z-index: 1000;
         }
     </style>
+    <script>
+        // Function to hide the loading screen after 5 seconds
+        function hideLoadingScreen() {
+            document.getElementById('loading-overlay').style.display = 'none';
+        }
+        setTimeout(hideLoadingScreen, 5000);
+    </script>
 </head>
 <body>
-    <div id="loading" class="glitch">
-        <div class="scanline"></div>
-        Loading...
+    <div id="loading-overlay">
+        <h1>Loading...</h1>
     </div>
-    <div id="prank">
-        <h1>🔥 Originake Storlinked WiFi 🔥</h1>
-        <nav>
-            <ul>
-                <li><a href="#prank1">Prank 1</a></li>
-                <li><a href="#prank2">Prank 2</a></li>
-                <li><a href="#prank3">Prank 3</a></li>
-            </ul>
-        </nav>
-        <button id="shuffle">Shuffle</button>
-        <button id="download">Download</button>
-        <div id="firebase-counter">Firebase Count: 0</div>
-        <div id="original-content">
-            <!-- Original content goes here -->
-        </div>
+    <div id="main-content" style="display: none;">
+        <h1>Welcome to My Prank Website</h1>
+        <p>This is the original design of the website that integrates a loading screen.</p>
     </div>
     <script>
-        setTimeout(() => {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('prank').style.display = 'flex';
-        }, 5000);
-
-        // Example functionality for buttons
-        document.getElementById('shuffle').addEventListener('click', () => {
-            alert('Shuffled!');
-        });
-        document.getElementById('download').addEventListener('click', () => {
-            alert('Downloading...');
-        });
-        // Firebase interaction would go here
+        // Show main content after loading screen
+        window.onload = function() {
+            document.getElementById('main-content').style.display = 'block';
+        };
     </script>
 </body>
 </html>
