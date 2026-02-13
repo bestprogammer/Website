@@ -3,27 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prank Website</title>
+    <title>🔥 Originake Storlinked WiFi 🔥</title>
     <style>
-        body {
+        body { margin: 0; font-family: Arial, sans-serif; overflow: hidden; }
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            color: #00ff00;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
+            font-size: 2rem;
         }
-        #loading {
-            font-size: 2em;
-            color: #333;
+        #prank {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        @keyframes glitch {
+            0% { clip-path: inset(0 0 0 0); }
+            10% { clip-path: inset(25% 0 75% 0); }
+            20% { clip-path: inset(0 0 0 0); }
+            30% { clip-path: inset(50% 0 50% 0); }
+            40% { clip-path: inset(0 0 0 0); }
+            50% { clip-path: inset(25% 0 75% 0); }
+            60% { clip-path: inset(0 0 0 0); }
+            100% { clip-path: inset(0 0 0 0); }
+        }
+        .glitch { animation: glitch 1s infinite; }
+        .scanline {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            pointer-events: none;
+            background: rgba(0, 0, 0, 0.05);
+            background-image: repeating-linear-gradient(
+                rgba(255, 255, 255, 0.1) 0,
+                rgba(255, 255, 255, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            animation: scanline 0.1s linear infinite;
+        }
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
         }
     </style>
 </head>
 <body>
-    <div id="loading">Loading...</div>
+    <div id="loading" class="glitch">
+        <div class="scanline"></div>
+        Loading...
+    </div>
+    <div id="prank">
+        <h1>🔥 Originake Storlinked WiFi 🔥</h1>
+        <nav>
+            <ul>
+                <li><a href="#prank1">Prank 1</a></li>
+                <li><a href="#prank2">Prank 2</a></li>
+                <li><a href="#prank3">Prank 3</a></li>
+            </ul>
+        </nav>
+        <button id="shuffle">Shuffle</button>
+        <button id="download">Download</button>
+        <div id="firebase-counter">Firebase Count: 0</div>
+        <div id="original-content">
+            <!-- Original content goes here -->
+        </div>
+    </div>
     <script>
-        setTimeout(function() {
-            document.getElementById('loading').innerHTML = "Welcome to the Prank Website!";
-        }, 3000); // Change after 3 seconds
+        setTimeout(() => {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('prank').style.display = 'flex';
+        }, 5000);
+
+        // Example functionality for buttons
+        document.getElementById('shuffle').addEventListener('click', () => {
+            alert('Shuffled!');
+        });
+        document.getElementById('download').addEventListener('click', () => {
+            alert('Downloading...');
+        });
+        // Firebase interaction would go here
     </script>
 </body>
 </html>
