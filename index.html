@@ -2,244 +2,253 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🔥 Originake Storlinked WiFi 🔥</title>
 
 <style>
-
-/* ========================= */
-/* 🟢 TERMINAL START 🟢 */
-/* ========================= */
-
-#loading-overlay {
-  position: middle;
-  width: 100%;
-  height: 100%;
-  background: black;
-  color: #00ff00;
-  font-family: monospace;
-  padding: 40px;
-  z-index: 9999;
-  overflow: hidden;
-}
-
-.terminal-line {
-  margin-bottom: 5px;
-  animation: type 0.5s steps(40,end);
-}
-
-@keyframes type {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* ========================= */
-/* 🔴 RGB GLITCH (END ONLY) 🔴 */
-/* ========================= */
-
-.rgb-mode {
-  animation: screenShake 0.2s infinite;
-}
-
-.rgb-mode::before,
-.rgb-mode::after {
-  content: attr(data-text);
-  position: absolute;
-  left: 0;
-}
-
-.rgb-mode::before { color: red; transform: translate(-3px,0); }
-.rgb-mode::after { color: blue; transform: translate(3px,0); }
-
-@keyframes screenShake {
-  0%{transform:translate(0,0)}
-  25%{transform:translate(3px,-3px)}
-  50%{transform:translate(-3px,3px)}
-  75%{transform:translate(3px,3px)}
-  100%{transform:translate(0,0)}
-}
-
-/* ========================= */
-/* 🔵 CRASH SCREEN 🔵 */
-/* ========================= */
-
-#crash-screen {
-  position: fixed;
-  width:100%;
-  height:100%;
-  background:#0000aa;
-  color:white;
-  display:none;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  font-family: monospace;
-  font-size:1.5rem;
-  z-index:10000;
-}
-
-/* ========================= */
-/* NORMAL PAGE */
-/* ========================= */
+*{margin:0;padding:0;box-sizing:border-box}
 
 body{
-  font-family: Comic Sans MS;
-  text-align:center;
+  font-family:"Segoe UI",sans-serif;
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  color:white;
+}
+
+/* ========================= */
+/* INTRO THUMBNAIL */
+/* ========================= */
+
+#intro-screen{
+  position:fixed;
+  inset:0;
+  background:black;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:20000;
+}
+
+.glitch{
+  font-size:clamp(2rem,7vw,4rem);
+  font-weight:bold;
+  position:relative;
+  animation:skew 1s infinite alternate;
+}
+
+.glitch::before,
+.glitch::after{
+  content:attr(data-text);
+  position:absolute;
+  left:0;
+  width:100%;
+}
+
+.glitch::before{
+  color:red;
+  transform:translate(-4px,-2px);
+}
+.glitch::after{
+  color:blue;
+  transform:translate(4px,2px);
+}
+
+@keyframes skew{
+  0%{transform:skew(0deg)}
+  50%{transform:skew(2deg)}
+  100%{transform:skew(-2deg)}
+}
+
+/* ========================= */
+/* BIOS */
+/* ========================= */
+
+#bios{
+  position:fixed;
+  inset:0;
+  background:black;
+  color:#00ff00;
+  font-family:monospace;
+  padding:5vw;
+  z-index:15000;
+  display:none;
+  overflow:auto;
+}
+
+/* ========================= */
+/* TERMINAL */
+/* ========================= */
+
+#terminal{
+  position:fixed;
+  inset:0;
+  background:black;
+  color:#00ff00;
+  font-family:monospace;
+  padding:5vw;
+  z-index:12000;
+  display:none;
+  overflow:auto;
+}
+
+/* ========================= */
+/* MAIN */
+/* ========================= */
+
+.aero{
+  backdrop-filter:blur(25px);
+  background:rgba(255,255,255,0.1);
   padding:2rem;
-  background:#fdf6e3;
+  border-radius:20px;
+  box-shadow:0 8px 40px rgba(0,0,0,0.5);
+  text-align:center;
+  max-width:95vw;
+  display:none;
 }
 
 .menu{
-  background:linear-gradient(45deg,#ff00cc,#3333ff);
-  padding:1rem;
-  border-radius:15px;
+  margin-bottom:1rem;
 }
 
 .menu a{
+  margin:0 8px;
   color:white;
-  margin:0 1rem;
   text-decoration:none;
   font-weight:bold;
+  font-size:0.9rem;
 }
+
+/* Download Button Animation */
 
 .download-btn{
-  font-size:2rem;
+  font-size:clamp(1rem,4vw,2rem);
   padding:1rem 2rem;
-  margin-top:2rem;
   background:linear-gradient(45deg,#ff00cc,#3333ff);
-  color:white;
   border:none;
   border-radius:15px;
+  color:white;
   cursor:pointer;
+  transform:scale(0.1);
+  animation:grow 1.5s forwards, float 2s infinite ease-in-out 1.5s;
 }
 
-.counter{margin-top:1rem;}
+@keyframes grow{
+  to{transform:scale(1);}
+}
+
+@keyframes float{
+  0%{transform:scale(1) translateY(0)}
+  50%{transform:scale(1.05) translateY(-10px)}
+  100%{transform:scale(1) translateY(0)}
+}
+
+.counter{margin-top:1rem;font-weight:bold}
 
 </style>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDCQz9V-ruLNaJNZ47ktUCZbIe-_RbT57Q",
-  authDomain: "rickeoll.firebaseapp.com",
-  databaseURL: "https://rickeoll-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "rickeoll",
-  storageBucket: "rickeoll.firebasestorage.app",
-  messagingSenderId: "736075919328",
-  appId: "1:736075919328:web:c0f4374192df63be8c8585"
-};
-
-const app=initializeApp(firebaseConfig);
-const db=getDatabase(app);
-const countRef=ref(db,'downloads/count');
-
-function incrementDownloadCount(){
-  runTransaction(countRef,(v)=>(v||0)+1);
-}
-window.incrementDownloadCount=incrementDownloadCount;
-
-window.addEventListener("DOMContentLoaded",()=>{
-  const counter=document.getElementById("download-counter");
-  onValue(countRef,(snap)=>{
-    counter.textContent="📊 Downloads so far: "+(snap.val()||0);
-  });
-});
-</script>
-
 </head>
 <body>
 
-<div id="loading-overlay"></div>
-
-<div id="crash-screen">
-<div>
-<h1>:(</h1>
-<p>Your system ran into a critical problem.</p>
-<p>Error Code: WIFI_ORIGINAKE_FAILURE</p>
-<p>Collecting data... 100%</p>
-<p>System shutting down...</p>
-</div>
+<div id="intro-screen">
+  <div class="glitch" data-text="ORIGINAKE SYSTEM">
+    ORIGINAKE SYSTEM
+  </div>
 </div>
 
-<div class="menu" id="prank-menu"></div>
-<h1>🔥 Originake Storlinked WiFi 🔥</h1>
+<div id="bios"></div>
+<div id="terminal"></div>
 
-<a href="https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1" target="_blank" onclick="incrementDownloadCount()">
-<button class="download-btn">⬇️ DownLoD ⬇️</button>
-</a>
-
-<p id="download-counter" class="counter">📊 loading...</p>
+<div class="aero" id="main">
+  <div class="menu" id="prank-menu"></div>
+  <h1>🔥 Originake Storlinked WiFi 🔥</h1>
+  <a href="https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1" target="_blank">
+    <button class="download-btn">⬇️ DownLoD ⬇️</button>
+  </a>
+  <p class="counter">📊 Ultra Secure Build v9.6</p>
+</div>
 
 <script>
 
 /* ========================= */
-/* TERMINAL SEQUENCE */
+/* INTRO GLITCH */
 /* ========================= */
 
-const overlay=document.getElementById("loading-overlay");
+setTimeout(()=>{
+  document.getElementById("intro-screen").style.display="none";
+  startBIOS();
+},2500);
 
-const lines=[
-"Booting Originake WiFi Injector v9.6...",
-"Establishing secure darknet tunnel...",
-"Bypassing firewall...",
-"Injecting free WiFi packets...",
-"Granting admin privileges...",
-"WARNING: unstable network core detected",
-"Preparing exploit payload..."
+/* ========================= */
+/* BIOS BOOT */
+/* ========================= */
+
+const bios=document.getElementById("bios");
+const terminal=document.getElementById("terminal");
+const main=document.getElementById("main");
+
+const biosLines=[
+"Phoenix BIOS v12.4.7",
+"Memory Test: 32768MB OK",
+"Detecting Devices...",
+"Initializing Network Adapter...",
+"Booting Originake OS..."
 ];
 
 let i=0;
 
-function addLine(){
+function typeLines(target,lines,callback){
   if(i<lines.length){
-    const div=document.createElement("div");
-    div.className="terminal-line";
-    div.textContent=lines[i];
-    overlay.appendChild(div);
-    i++;
-    setTimeout(addLine,600);
+    let line=document.createElement("div");
+    target.appendChild(line);
+    let text=lines[i];
+    let j=0;
+    let typing=setInterval(()=>{
+      line.textContent+=text[j];
+      j++;
+      if(j>=text.length){
+        clearInterval(typing);
+        i++;
+        setTimeout(()=>typeLines(target,lines,callback),200);
+      }
+    },20);
   }else{
-    midPhase();
+    i=0;
+    setTimeout(callback,800);
   }
 }
 
-addLine();
-
-/* ========================= */
-/* MID PHASE POPUPS */
-/* ========================= */
-
-function midPhase(){
-
-  setTimeout(()=>{
-    alert("⚠ Network instability detected!");
-    alert("⚠ Critical vulnerability found!");
-  },1500);
-
-  setTimeout(()=>{
-    overlay.classList.add("rgb-mode");
-    overlay.setAttribute("data-text","SYSTEM OVERRIDE");
-    overlay.innerHTML="<h1>SYSTEM OVERRIDE</h1>";
-  },4000);
-
-  setTimeout(()=>{
-    crash();
-  },6500);
+function startBIOS(){
+  bios.style.display="block";
+  typeLines(bios,biosLines,()=>{
+    bios.style.display="none";
+    startTerminal();
+  });
 }
 
 /* ========================= */
-/* CRASH */
+/* TERMINAL */
 /* ========================= */
 
-function crash(){
-  overlay.style.display="none";
-  document.getElementById("crash-screen").style.display="flex";
+function startTerminal(){
+  terminal.style.display="block";
+  const lines=[
+  "Establishing encrypted tunnel...",
+  "Bypassing firewall...",
+  "Injecting packets...",
+  "Elevating privileges...",
+  "Uploading payload..."
+  ];
+  typeLines(terminal,lines,()=>{
+    terminal.style.display="none";
+    main.style.display="block";
+  });
 }
 
 /* ========================= */
-/* COMPLETE LINK LIST */
+/* ALL LINKS */
 /* ========================= */
 
 const prankLinks=[
@@ -255,36 +264,35 @@ const prankLinks=[
 {url:"https://corndog.io/",label:"🌽 Corndog"},
 {url:"https://zoomquilt.org/",label:"🔍 Zoomquilt"},
 {url:"https://staggeringbeauty.com/",label:"💃 Staggering Beauty"},
-{url:"https://longdogechallenge.com/",label:"🐕 Long Doge Challenge"},
-{url:"https://www.patience-is-a-virtue.org/",label:"⏳ Patience Game"},
+{url:"https://longdogechallenge.com/",label:"🐕 Long Doge"},
+{url:"https://www.patience-is-a-virtue.org/",label:"⏳ Patience"},
 {url:"https://thatsthefinger.com/",label:"🖕 The Finger"},
 {url:"https://isitchristmas.com/",label:"🎄 Christmas?"},
-{url:"https://trypap.com/",label:"✍️ Passive Aggressive Passwords"},
+{url:"https://trypap.com/",label:"✍️ Passive Aggressive"},
 {url:"https://www.rrrgggbbb.com/",label:"🌈 RGB Madness"},
-{url:"https://beesbeesbees.com/",label:"🐝 Bees Everywhere"},
+{url:"https://beesbeesbees.com/",label:"🐝 Bees"},
 {url:"https://chrismckenzie.com/",label:"👀 Creepy Blink"},
-{url:"https://www.koalastothemax.com/",label:"🧩 Koalas to the Max"},
+{url:"https://www.koalastothemax.com/",label:"🧩 Koalas"},
 {url:"https://leekspin.com/",label:"🌀 Leekspin"},
 {url:"https://www.donothingfor2minutes.com/",label:"😌 Zen Timer"},
-{url:"https://pixelsfighting.com/",label:"🧱 Pixels Fighting"},
-{url:"https://eelslap.com/",label:"🐟 Slap with an Eel"},
-{url:"https://www.ismycomputeron.com/",label:"💻 Is My Computer On?"},
-{url:"https://whatsmystarbucksname.com/",label:"☕ Starbucks Name?"},
-{url:"https://shadyurl.com/",label:"🔗 Shady URL Generator"},
-{url:"https://zombo.com/",label:"🌐 ZomboCom"},
+{url:"https://pixelsfighting.com/",label:"🧱 Pixels"},
+{url:"https://eelslap.com/",label:"🐟 Eel Slap"},
+{url:"https://www.ismycomputeron.com/",label:"💻 Computer On?"},
+{url:"https://whatsmystarbucksname.com/",label:"☕ Starbucks"},
+{url:"https://shadyurl.com/",label:"🔗 Shady URL"},
+{url:"https://zombo.com/",label:"🌐 Zombo"},
 {url:"https://thisissand.com/",label:"🏖️ Sand Art"},
-{url:"https://hasthelargehadroncolliderdestroyedtheworldyet.com/",label:"💥 LHC Check"},
-{url:"https://drawastickman.com/",label:"✏️ Draw a Stickman"},
-{url:"https://burymewithmymoney.com/",label:"💸 Bury Me with $"},
-{url:"https://corgiorgy.com/",label:"🐶 Corgi Orgy"},
-{url:"https://notsend.com/",label:"📧 Not Send Email"},
-{url:"https://www.ringingtelephone.com/",label:"☎️ Ring Ring!"},
+{url:"https://hasthelargehadroncolliderdestroyedtheworldyet.com/",label:"💥 LHC"},
+{url:"https://drawastickman.com/",label:"✏️ Stickman"},
+{url:"https://burymewithmymoney.com/",label:"💸 Bury Me"},
+{url:"https://corgiorgy.com/",label:"🐶 Corgi"},
+{url:"https://notsend.com/",label:"📧 Not Send"},
+{url:"https://www.ringingtelephone.com/",label:"☎️ Ring"},
 {url:"https://www.hackertyper.com/",label:"👨‍💻 Hacker Typer"}
 ];
 
 function shuffleLinks(){
   const menu=document.getElementById("prank-menu");
-  menu.innerHTML="";
   prankLinks.sort(()=>0.5-Math.random()).slice(0,6).forEach(link=>{
     const a=document.createElement("a");
     a.href=link.url;
@@ -294,9 +302,8 @@ function shuffleLinks(){
   });
 }
 
-window.addEventListener("DOMContentLoaded",shuffleLinks);
+shuffleLinks();
 
 </script>
-
 </body>
 </html>
