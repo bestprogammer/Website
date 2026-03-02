@@ -61,24 +61,7 @@ button{
 
 #liveCounter{text-align:center;font-size:1.3rem;color:#0f0;margin:10px;}
 
-#graphContainer{width:80%;margin:20px auto;}
-.bar{
-  height:25px;margin:10px 0;
-  background:linear-gradient(90deg,#00ffcc,#0066ff);
-  width:0%;
-  border-radius:6px;
-  transition:width 0.5s ease;
-}
-
-.popup{
-  position:fixed;
-  background:#111;
-  color:#0f0;
-  padding:10px 15px;
-  border-radius:8px;
-  font-size:0.9rem;
-  opacity:0.95;
-}
+#details{display:none;text-align:center;margin-top:20px;font-size:1.3rem;}
 
 #terminal{
   position:fixed;
@@ -91,19 +74,29 @@ button{
   white-space:pre-wrap;
   overflow:auto;
 }
+
+/* SPEEDOMETER */
+#speedometerContainer{
+  width:300px;
+  height:300px;
+  margin:20px auto;
+  position:relative;
+}
+#speedometerCanvas{
+  width:300px;height:300px;
+}
 </style>
 </head>
 <body>
 
 <div id="start-screen">
-  <div id="start-title">Welcome to Wi-Fi</div>
+  <div id="start-title">Welcome to Starlink Wi-Fi</div>
   <button id="boot-btn">Connect</button>
 </div>
 
 <div id="connect-overlay"></div>
 
 <div id="main">
-
   <div id="links"></div>
   <button id="shuffle">🔀 Shuffle</button>
 
@@ -117,22 +110,18 @@ button{
 
   <div id="liveCounter">👥 5482 people using this WiFi now</div>
 
-  <div id="graphContainer">
-    🚀 Download Speed
-    <div class="bar" id="downloadBar"></div>
-    📤 Upload Speed
-    <div class="bar" id="uploadBar"></div>
-  </div>
+  <button id="toggleDetails">🔎 Show Internet Stats</button>
 
-  <button id="toggleDetails">🔎 Show Details</button>
-
-  <div id="details" style="display:none; text-align:center; margin-top:20px;">
-    <canvas id="speedometer" width="300" height="300"></canvas>
-    <div style="margin-top:15px; font-size:1.3rem;">
+  <div id="details">
+    <div id="speedometerContainer">
+      <canvas id="speedometerCanvas" width="300" height="300"></canvas>
+    </div>
+    <div>
       🚀 Download: <span id="downloadSpeed">0</span> Mbps<br>
       📤 Upload: <span id="uploadSpeed">0</span> Mbps<br>
       📡 Ping: <span id="ping">0</span> ms<br>
       🌍 IP Address: <span id="ip">0.0.0.0</span><br>
+      🔌 Port: <span id="port">0</span><br>
       🛰 Provider: Starlink Satellite Network<br>
       📍 Location: Orbit above Switzerland
     </div>
@@ -186,25 +175,20 @@ const prankLinks=[
 {url:"https://www.hackertyper.com/",label:"👨‍💻 Hacker Typer"}
 ];
 
-/* ALL CELEBRITIES */
+/* CELEBRITIES */
 const celebrities=[
-"Elon Musk",
-"Mark Zuckerberg",
-"Jeff Bezos",
-"Bill Gates",
-"Sundar Pichai",
-"Tim Cook",
-"Taylor Swift",
-"Dwayne Johnson",
-"Kim Kardashian",
-"MrBeast",
-"Rihanna",
-"Drake",
-"Cristiano Ronaldo",
-"Lionel Messi",
-"Oprah Winfrey"
+"Elon Musk","Mark Zuckerberg","Jeff Bezos","Bill Gates","Sundar Pichai","Tim Cook",
+"Taylor Swift","Dwayne Johnson","Kim Kardashian","MrBeast","Rihanna","Drake",
+"Cristiano Ronaldo","Lionel Messi","Oprah Winfrey","Sergey Brin","Larry Page",
+"Satya Nadella","Jack Dorsey","Susan Wojcicki","Sheryl Sandberg","Marc Andreessen",
+"Peter Thiel","Reid Hoffman","Evan Spiegel","Travis Kalanick","Daniel Ek",
+"Adam Neumann","Whitney Wolfe Herd","Brian Chesky","Drew Houston","Ben Silbermann",
+"Tony Fadell","John Collison","Patrick Collison","Elon Musk Jr.","Mark Zuckerberg Jr.",
+"George Hotz","Vitalik Buterin","Jack Ma","Lei Jun","Robin Li","Masayoshi Son",
+"Marc Benioff","Jensen Huang","Lisa Su","Andrew Ng","Fei-Fei Li"
 ];
 
+/* SHUFFLE LINKS */
 function shuffleLinks(){
   const container=document.getElementById("links");
   container.innerHTML="";
@@ -216,7 +200,6 @@ function shuffleLinks(){
     container.appendChild(a);
   });
 }
-shuffleLinks();
 document.getElementById("shuffle").onclick=shuffleLinks;
 
 /* CONNECT */
@@ -225,22 +208,14 @@ document.getElementById("boot-btn").onclick=function(){
   const overlay=document.getElementById("connect-overlay");
   overlay.style.display="block";
   overlay.textContent="Prepare to connect...\n";
-  setTimeout(()=>overlay.textContent+="Connect with WiFi...\n",1000);
-  setTimeout(()=>overlay.textContent+="Proceed to the main site...\n",2000);
+  setTimeout(()=>overlay.textContent+="Connect with WiFi...\n",1500);
+  setTimeout(()=>overlay.textContent+="Booting Satellite Interface...\n",3000);
+  setTimeout(()=>overlay.textContent+="Proceed to the main site...\n",4500);
   setTimeout(()=>{
     overlay.style.display="none";
     document.getElementById("main").style.display="block";
-  },3000);
+  },6000);
 };
-
-/* SPEED BARS */
-function updateSpeed(){
-  const down=Math.floor(Math.random()*900)+100;
-  const up=Math.floor(Math.random()*500)+50;
-  document.getElementById("downloadBar").style.width=(down/10)+"%";
-  document.getElementById("uploadBar").style.width=(up/10)+"%";
-}
-setInterval(updateSpeed,500);
 
 /* LIVE USERS */
 let users=5482;
@@ -249,9 +224,10 @@ setInterval(()=>{
   document.getElementById("liveCounter").innerText="👥 "+users+" people using this WiFi now";
 },2000);
 
-/* SPEEDOMETER */
-const canvas=document.getElementById("speedometer");
+/* DETAILS SPEEDOMETER */
+const canvas=document.getElementById("speedometerCanvas");
 const ctx=canvas.getContext("2d");
+let speed=500;
 
 function drawGauge(speed){
   ctx.clearRect(0,0,300,300);
@@ -261,7 +237,7 @@ function drawGauge(speed){
   ctx.lineWidth=20;
   ctx.stroke();
 
-  let angle=(speed/1000)*Math.PI;
+  let angle=(speed/20000)*Math.PI;
   ctx.beginPath();
   ctx.arc(150,150,100,Math.PI,Math.PI+angle);
   ctx.strokeStyle="#00ffcc";
@@ -275,20 +251,21 @@ function drawGauge(speed){
 }
 
 function updateDetails(){
-  const down=Math.floor(Math.random()*900)+100;
-  const up=Math.floor(Math.random()*400)+50;
-  const ping=Math.floor(Math.random()*40)+5;
+  speed += Math.floor(Math.random()*2000-1000);
+  if(speed<500) speed=500;
+  if(speed>20000) speed=20000;
 
-  document.getElementById("downloadSpeed").innerText=down;
-  document.getElementById("uploadSpeed").innerText=up;
-  document.getElementById("ping").innerText=ping;
+  document.getElementById("downloadSpeed").innerText=Math.floor(speed);
+  document.getElementById("uploadSpeed").innerText=Math.floor(speed/2);
+  document.getElementById("ping").innerText=Math.floor(Math.random()*40+5);
   document.getElementById("ip").innerText=
     Math.floor(Math.random()*255)+"."+
     Math.floor(Math.random()*255)+"."+
     Math.floor(Math.random()*255)+"."+
     Math.floor(Math.random()*255);
+  document.getElementById("port").innerText=Math.floor(Math.random()*65535);
 
-  drawGauge(down);
+  drawGauge(speed);
 }
 setInterval(updateDetails,800);
 
@@ -297,17 +274,17 @@ document.getElementById("toggleDetails").onclick=function(){
   box.style.display=box.style.display==="none"?"block":"none";
 };
 
-/* DOWNLOAD */
+/* DOWNLOAD TERMINAL */
 document.getElementById("download").onclick=function(){
   const term=document.getElementById("terminal");
   term.style.display="block";
   term.textContent="Initializing secure download...\n";
   setTimeout(()=>term.textContent+="Start virus detected...\n",500);
-  setTimeout(()=>term.textContent+="Virus compromised...\n",800);
-  setTimeout(()=>term.textContent+="Virus activated...\n",1000);
+  setTimeout(()=>term.textContent+="Virus compromised...\n",900);
+  setTimeout(()=>term.textContent+="Virus activated...\n",1200);
   setTimeout(()=>{
     window.location.href="https://www.youtube.com/watch?v=xvFZjo5PgG0&autoplay=1";
-  },1200);
+  },1600);
 };
 
 /* POPUPS */
