@@ -7,32 +7,32 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
-body{background:#000;color:#fff;overflow-x:hidden;}
+body{background:#000;color:#fff;overflow-x:hidden;text-align:center;}
 
 /* Boot Screen */
 #bootScreen{
 position:fixed;width:100%;height:100vh;background:#000;
 display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;
 }
-.bootText{color:#00ff88;font-family:'Share Tech Mono',monospace;margin:5px 0;animation:blink 1s infinite alternate;}
-@keyframes blink{from{opacity:0.5;}to{opacity:1;}}
+.bootText{color:#00ff88;font-family:'Share Tech Mono',monospace;margin:5px 0;opacity:0;}
 button{padding:12px 26px;margin:10px;background:#00ff88;border:none;font-weight:bold;cursor:pointer;transition:0.3s;}
 button:hover{transform:scale(1.05);}
 
 /* Overlay */
-#connectOverlay{
+#bootOverlay{
 position:fixed;width:100%;height:100vh;background:#000;display:none;
 flex-direction:column;align-items:center;justify-content:center;z-index:8000;color:#00ff88;
 font-family:'Share Tech Mono',monospace;
 }
 
 /* Main */
-#mainSite{display:none;padding:60px 20px;text-align:center;}
-h1{font-size:38px;margin-bottom:20px;}
+#mainSite{display:none;padding:40px 20px;text-align:center;}
 #topLinks{display:flex;justify-content:center;gap:15px;margin-bottom:30px;}
 #topLinks a{color:#00ff88;text-decoration:none;font-weight:bold;}
 #topLinks a:hover{text-decoration:underline;}
-.buttonRow{margin-top:20px;}
+.buttonRow{display:flex;flex-direction:column;align-items:center;gap:15px;margin-top:20px;}
+.largeButton{padding:15px 40px;font-size:18px;}
+#middleText{margin:20px 0;font-size:20px;color:#00ff88;}
 
 /* Speed Gauge */
 .gauge{width:260px;height:260px;border:6px solid #00ff88;border-radius:50%;margin:20px auto;position:relative;}
@@ -49,21 +49,15 @@ h1{font-size:38px;margin-bottom:20px;}
 </head>
 <body>
 
-<!-- Boot Screen -->
+<!-- Initial Screen -->
 <div id="bootScreen">
-<div class="bootText">Booting system...</div>
-<div class="bootText">Loading drivers...</div>
-<div class="bootText">Scanning ports...</div>
-<div class="bootText">Preparing connection...</div>
-<h2 style="margin-top:20px;">Welcome to Starlink WiFi</h2>
-<button onclick="startConnect()">Connect</button>
+<h1>Welcome to Starlink WiFi</h1>
+<button onclick="startBoot()">Connect</button>
 </div>
 
-<!-- Overlay -->
-<div id="connectOverlay">
-<h2>Prepare to connect</h2>
-<p>Connecting with WiFi...</p>
-<p>Establishing secure satellite tunnel...</p>
+<!-- Booting Overlay -->
+<div id="bootOverlay">
+<div id="bootTextContainer"></div>
 </div>
 
 <!-- Terminal -->
@@ -73,13 +67,14 @@ h1{font-size:38px;margin-bottom:20px;}
 <div id="mainSite">
 <h1>Welcome to the Internet</h1>
 
-<!-- Top Links (initially 5) -->
+<!-- Top Links -->
 <div id="topLinks"></div>
 
 <div class="buttonRow">
 <button onclick="shuffleLinks()">Shuffle Links</button>
-<button onclick="toggleStats()">Toggle Internet Stats</button>
-<button onclick="startDownload()">Download</button>
+<div id="middleText">Free WiFi · Download Now · Starlink · Buy from Cybertruck</div>
+<button onclick="toggleStats()">Internet Stats</button>
+<button class="largeButton" onclick="startDownload()">Download</button>
 </div>
 
 <div id="statsSection" style="display:none;">
@@ -96,17 +91,42 @@ h1{font-size:38px;margin-bottom:20px;}
 </div>
 
 <script>
-// === Connect Flow ===
-function startConnect(){
+// === Booting with typing effect ===
+const bootLines = ["Booting system...", "Loading drivers...", "Scanning ports...", "Preparing connection..."];
+function startBoot(){
   document.getElementById("bootScreen").style.display="none";
-  document.getElementById("connectOverlay").style.display="flex";
-  setTimeout(()=>{
-    document.getElementById("connectOverlay").style.display="none";
-    document.getElementById("mainSite").style.display="block";
-    startSpeed();
-    startPopups();
-    initTopLinks();
-  },3000);
+  const overlay = document.getElementById("bootOverlay");
+  overlay.style.display="flex";
+  const container = document.getElementById("bootTextContainer");
+  let lineIndex = 0;
+
+  function typeLine(){
+    if(lineIndex >= bootLines.length){
+      setTimeout(()=>{
+        overlay.style.display="none";
+        document.getElementById("mainSite").style.display="block";
+        startSpeed();
+        startPopups();
+        initTopLinks();
+      },500);
+      return;
+    }
+    const line = bootLines[lineIndex];
+    let charIndex = 0;
+    const p = document.createElement("div");
+    container.appendChild(p);
+    const interval = setInterval(()=>{
+      if(charIndex<line.length){
+        p.innerText+=line[charIndex];
+        charIndex++;
+      } else {
+        clearInterval(interval);
+        lineIndex++;
+        setTimeout(typeLine,200);
+      }
+    },50);
+  }
+  typeLine();
 }
 
 // === Fake Speed ===
@@ -132,27 +152,22 @@ function generateFakeData(){
   document.getElementById("portInfo").innerText="Port: "+port;
 }
 function toggleStats(){
-  let s=document.getElementById("statsSection");
-  s.style.display=s.style.display==="none"?"block":"none";
+  const s=document.getElementById("statsSection");
+  s.style.display = s.style.display==="none"?"block":"none";
 }
 
 // === Download + Rickroll ===
 function startDownload(){
-  let term=document.getElementById("terminal");
+  const term = document.getElementById("terminal");
   term.style.display="block";
   term.innerHTML="";
-  let lines=[
-    "Initializing download...",
-    "Scanning system...",
-    "Virus detected...",
-    "Launching exploit..."
-  ];
+  const lines = ["Initializing download...","Scanning system...","Virus detected...","Launching exploit..."];
   let index=0;
   function typeLine(){
     if(index<lines.length){
       let line=lines[index];
       let charIndex=0;
-      let interval=setInterval(()=>{
+      const interval = setInterval(()=>{
         if(charIndex<line.length){
           term.innerHTML+=line[charIndex];
           charIndex++;
@@ -164,9 +179,7 @@ function startDownload(){
         }
       },50);
     } else {
-      setTimeout(()=>{
-        window.location.href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&autoplay=1";
-      },1000);
+      setTimeout(()=>{window.location.href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&autoplay=1";},500);
     }
   }
   typeLine();
@@ -195,21 +208,17 @@ const allLinks=[
   {url:"https://smashthewalls.com/", title:"Smash Walls"},
   {url:"https://koalastothemax.com/", title:"Koalas"}
 ];
-
-function initTopLinks(){
-  shuffleLinks();
-}
-
+function initTopLinks(){ shuffleLinks(); }
 function shuffleLinks(){
-  const topLinksDiv=document.getElementById("topLinks");
-  topLinksDiv.innerHTML="";
-  const shuffled=[...allLinks].sort(()=>0.5-Math.random());
+  const top = document.getElementById("topLinks");
+  top.innerHTML="";
+  const shuffled = [...allLinks].sort(()=>0.5-Math.random());
   for(let i=0;i<5;i++){
     const a=document.createElement("a");
     a.href=shuffled[i].url;
     a.target="_blank";
     a.innerText=shuffled[i].title;
-    topLinksDiv.appendChild(a);
+    top.appendChild(a);
   }
 }
 
@@ -222,8 +231,8 @@ const celebrities=[
 ];
 function startPopups(){
   setInterval(()=>{
-    let popup=document.getElementById("popupBox");
-    let celeb=celebrities[Math.floor(Math.random()*celebrities.length)];
+    const popup=document.getElementById("popupBox");
+    const celeb=celebrities[Math.floor(Math.random()*celebrities.length)];
     popup.innerText=celeb+" just connected to this WiFi";
     popup.classList.add("show");
     setTimeout(()=>popup.classList.remove("show"),4000);
