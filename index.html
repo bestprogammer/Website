@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FREE STARLINK WIFI</title>
-
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{
@@ -20,29 +19,30 @@ body{
   position:fixed;
   inset:0;
   background:black;
-  color:#00ff00;
   display:flex;
+  flex-direction:column;
   justify-content:center;
   align-items:center;
-  font-size:4rem;
+  font-size:3rem;
   font-weight:bold;
   text-align:center;
   z-index:10000;
-  overflow:hidden;
 }
 
-/* START TEXT ANIMATION */
 #start-text{
-  position:relative;
-  animation:moveText 2s linear infinite alternate;
-}
-@keyframes moveText{
-  0%{left:-100%;}
-  50%{left:50%;}
-  100%{left:100%;}
+  margin-top:20px;
+  font-size:3rem;
+  letter-spacing:0.1em;
+  color:#FFD700; /* Golden nur für deinen Namen */
 }
 
-/* LOADING */
+/* WAPPEN */
+#wappen{
+  width:150px;
+  height:auto;
+}
+
+/* BOOTING LOADING */
 #loading-overlay{
   position:fixed;inset:0;
   background:black;
@@ -50,11 +50,24 @@ body{
   font-family:Consolas,monospace;
   display:flex;
   flex-direction:column;
-  justify-content:center;
-  align-items:center;
+  justify-content:flex-start;
+  align-items:flex-start;
   font-size:1.5rem;
   z-index:9999;
+  padding:20px;
+  white-space:pre-wrap;
   display:none;
+}
+
+/* START BUTTON */
+#start-btn{
+  margin-top:40px;
+  padding:10px 20px;
+  font-size:1.5rem;
+  background:#111;
+  color:#00ff00;
+  border:none;
+  cursor:pointer;
 }
 
 /* MAIN */
@@ -66,6 +79,7 @@ body{
   justify-content:space-between;
   padding:30px;
   background:linear-gradient(180deg,#000814,#001d3d);
+  transition: transform 1s ease-in-out;
 }
 
 #links{text-align:center;font-size:1rem;}
@@ -87,30 +101,37 @@ body{
   display:none;
   overflow:hidden;
   white-space:pre;
+  transform: rotateX(10deg);
 }
 
-/* OCTOCAT */
-#secretBtn{position:fixed;bottom:20px;right:20px;display:none;padding:10px 15px;background:#222;border:none;color:white;cursor:pointer;z-index:9999;}
-#octocat{position:fixed;bottom:60px;left:-200px;width:140px;transition:left 5s linear;}
+/* SPIN BUTTON */
+#spinBtn{
+  display:none;
+  margin:20px auto;
+  padding:15px 25px;
+  font-size:1.5rem;
+  background:#333;
+  color:#ff0;
+  border:none;
+  cursor:pointer;
+  border-radius:10px;
+}
 </style>
 </head>
 <body>
 
 <div id="start-screen">
-  <div id="start-text">STARTING OVERDRIVE</div>
+  <img id="wappen" src="wappen.png" alt="Wappen">
+  <div id="start-text">Enea Rohner</div>
+  <button id="start-btn">START BOOTING</button>
 </div>
 
-<div id="loading-overlay">
-Booting FREE STARLINK WiFi...<br>
-Connecting to Temu Satellite...<br>
-Authorizing Elon Musk...<br>
-Launching Interface...
-</div>
+<div id="loading-overlay"></div>
 
 <div id="main">
   <div>
     <div id="links"></div>
-    <button id="shuffle" onclick="shuffleLinks()">🔀 Shuffle</button>
+    <button id="shuffle">🔀 Shuffle</button>
   </div>
 
   <div id="text">
@@ -122,12 +143,10 @@ Launching Interface...
   </div>
 
   <button id="download" onclick="startDownload()">⬇ DOWNLOAD FREE WIFI</button>
+  <button id="spinBtn" onclick="spinWebsite()">🌪 Website spinnt!</button>
 </div>
 
 <div id="terminal"></div>
-
-<button id="secretBtn" onclick="runCat()">🐱 Launch Octocat</button>
-<img id="octocat" src="https://github.githubassets.com/images/modules/logos_page/Octocat.png">
 
 <script>
 /* ================= LINKS ================= */
@@ -181,18 +200,62 @@ function shuffleLinks(){
     a.textContent=link.label;
     container.appendChild(a);
   });
+  shuffleClicks++;
+  if(shuffleClicks>=20){
+    document.getElementById("spinBtn").style.display="block";
+  }
 }
+let shuffleClicks=0;
 shuffleLinks();
 
-/* ================= START SCREEN + LOADING ================= */
-setTimeout(()=>{
-  document.getElementById("start-screen").style.display="none";
-  document.getElementById("loading-overlay").style.display="flex";
-  setTimeout(()=>{
-    document.getElementById("loading-overlay").style.display="none";
-    document.getElementById("main").style.display="flex";
-  },2500);
-},2500);
+/* ================= STARTSCREEN ANIMATION ================= */
+const startText=document.getElementById("start-text");
+const startScreen=document.getElementById("start-screen");
+const loadingOverlay=document.getElementById("loading-overlay");
+document.getElementById("start-btn").addEventListener("click",()=>{
+  let full="Enea Rohner";
+  let display=full.split("");
+  let interval=setInterval(()=>{
+    if(display.length>2){
+      display.splice(Math.floor(Math.random()*display.length),1);
+      startText.textContent=display.join("");
+    } else {
+      clearInterval(interval);
+      startScreen.style.display="none";
+      startBooting();
+    }
+  },200);
+});
+
+/* ================= LOADING / TYPING EFFECT ================= */
+function startBooting(){
+  loadingOverlay.style.display="flex";
+  const bootLines=[
+    "Booting FREE STARLINK WiFi...",
+    "Connecting to Temu Satellite...",
+    "Authorizing Elon Musk...",
+    "Launching Interface..."
+  ];
+  let lineIndex=0;
+  let charIndex=0;
+  function typeLine(){
+    if(lineIndex<bootLines.length){
+      if(charIndex<bootLines[lineIndex].length){
+        loadingOverlay.textContent += bootLines[lineIndex][charIndex];
+        charIndex++;
+        setTimeout(typeLine,50);
+      } else {
+        loadingOverlay.textContent += "\n";
+        lineIndex++;
+        charIndex=0;
+        setTimeout(typeLine,200);
+      }
+    } else {
+      setTimeout(()=>{loadingOverlay.style.display="none"; document.getElementById("main").style.display="flex";},500);
+    }
+  }
+  typeLine();
+}
 
 /* ================= DOWNLOAD TERMINAL ================= */
 function startDownload(){
@@ -201,11 +264,12 @@ function startDownload(){
   term.style.display="block";
 
   const messages=[
-    "Downloading file...",
-    "Data stolen...",
-    "Starting Hack...",
-    "Virus installed...",
-    "Virus activated..."
+    "Start Downloading...",
+    "Virus Comprimised...",
+    "Virus Decomprimised...",
+    "Virus Installed...",
+    "Virus Activated...",
+    "SYSTEM HACKED..."
   ];
 
   let percent=0;
@@ -235,20 +299,12 @@ function startDownload(){
   },15);
 }
 
-/* ================= OCTOCAT ================= */
-let clicks=0;
-document.addEventListener("click",()=>{
-  clicks++;
-  if(clicks===20){
-    document.getElementById("secretBtn").style.display="block";
-  }
-});
-function runCat(){
-  const cat=document.getElementById("octocat");
-  cat.style.left="120vw";
-  setTimeout(()=>{cat.style.left="-200px";},5000);
+/* ================= SPIN WEBSITE ================= */
+function spinWebsite(){
+  const main=document.getElementById("main");
+  main.style.transform="rotate(720deg) scale(1.1)";
+  setTimeout(()=>{main.style.transform="rotate(0deg) scale(1)";},2000);
 }
 </script>
-
 </body>
 </html>
