@@ -29,6 +29,10 @@ font-family:'Share Tech Mono',monospace;
 /* Main */
 #mainSite{display:none;padding:60px 20px;text-align:center;}
 h1{font-size:38px;margin-bottom:20px;}
+#topLinks{display:flex;justify-content:center;gap:15px;margin-bottom:30px;}
+#topLinks a{color:#00ff88;text-decoration:none;font-weight:bold;}
+#topLinks a:hover{text-decoration:underline;}
+.buttonRow{margin-top:20px;}
 
 /* Speed Gauge */
 .gauge{width:260px;height:260px;border:6px solid #00ff88;border-radius:50%;margin:20px auto;position:relative;}
@@ -41,12 +45,6 @@ h1{font-size:38px;margin-bottom:20px;}
 
 /* Terminal */
 #terminal{display:none;position:fixed;width:100%;height:100vh;background:#000;color:#00ff00;font-family:'Share Tech Mono',monospace;padding:40px;z-index:9000;overflow:auto;}
-
-/* Links Section */
-.links{margin-top:40px;columns:2;}
-.links a{display:block;margin:6px 0;color:#00ff88;text-decoration:none;}
-.links a:hover{text-decoration:underline;}
-.buttonRow{margin-top:20px;}
 </style>
 </head>
 <body>
@@ -73,15 +71,15 @@ h1{font-size:38px;margin-bottom:20px;}
 
 <!-- Main Site -->
 <div id="mainSite">
-<h1>🚀 Welcome to the Internet</h1>
-<p>Experien hig qualiti wifi .</p>
-<p>delon mustl appproverd.</p>
-<p>cool internat stets.</p>
+<h1>Welcome to the Internet</h1>
+
+<!-- Top Links (initially 5) -->
+<div id="topLinks"></div>
 
 <div class="buttonRow">
-<button onclick="shufflePrank()">🎲 Shuffle Prank</button>
-<button onclick="toggleStats()">📡 Toggle Internet Stats</button>
-<button onclick="startDownload()">⬇ Download</button>
+<button onclick="shuffleLinks()">Shuffle Links</button>
+<button onclick="toggleStats()">Toggle Internet Stats</button>
+<button onclick="startDownload()">Download</button>
 </div>
 
 <div id="statsSection" style="display:none;">
@@ -94,114 +92,128 @@ h1{font-size:38px;margin-bottom:20px;}
 <p id="portInfo"></p>
 </div>
 
-<div class="links">
-<a href="https://www.pointerpointer.com/" target="_blank">👉 Pointer Pointer 😂</a>
-<a href="https://cat-bounce.com/" target="_blank">🐱 Cat Bounce</a>
-<a href="https://www.staggeringbeauty.com/" target="_blank">🕺 Staggering Beauty</a>
-<a href="https://hackertyper.net/" target="_blank">💻 Hacker Typer</a>
-<a href="https://theuselessweb.com/" target="_blank">🌍 Useless Web</a>
-<a href="https://zoomquilt.org/" target="_blank">🌀 Infinite Zoom</a>
-<a href="https://www.fallingfalling.com/" target="_blank">🌊 Falling</a>
-<a href="https://heeeeeeeey.com/" target="_blank">🎉 Heeeey</a>
-<a href="https://thatsthefinger.com/" target="_blank">🖕 Surprise</a>
-<a href="https://r33b.net/" target="_blank">🤯 R33B</a>
-<a href="https://bouncingdvdlogo.com/" target="_blank">📀 DVD Bounce</a>
-<a href="https://longdogechallenge.com/" target="_blank">🐶 Long Doge</a>
-<a href="https://mondrianandme.com/" target="_blank">🎨 Mondrian</a>
-<a href="https://eelslap.com/" target="_blank">🐟 Eel Slap</a>
-<a href="https://isitchristmas.com/" target="_blank">🎄 Christmas?</a>
-<a href="https://endless.horse/" target="_blank">🐴 Endless Horse</a>
-<a href="https://checkboxrace.com/" target="_blank">☑ Checkbox Race</a>
-<a href="https://crouton.net/" target="_blank">🍞 Crouton</a>
-<a href="https://smashthewalls.com/" target="_blank">🧱 Smash Walls</a>
-<a href="https://koalastothemax.com/" target="_blank">🐨 Koalas</a>
-</div>
-</div>
-
 <div class="popup" id="popupBox"></div>
+</div>
 
 <script>
-/* Connect Flow */
+// === Connect Flow ===
 function startConnect(){
-document.getElementById("bootScreen").style.display="none";
-document.getElementById("connectOverlay").style.display="flex";
-setTimeout(()=>{
-document.getElementById("connectOverlay").style.display="none";
-document.getElementById("mainSite").style.display="block";
-startSpeed();
-startPopups();
-},3000);
+  document.getElementById("bootScreen").style.display="none";
+  document.getElementById("connectOverlay").style.display="flex";
+  setTimeout(()=>{
+    document.getElementById("connectOverlay").style.display="none";
+    document.getElementById("mainSite").style.display="block";
+    startSpeed();
+    startPopups();
+    initTopLinks();
+  },3000);
 }
 
-/* Speed Simulation */
+// === Fake Speed ===
 let speed=7000;
 function startSpeed(){
-setInterval(()=>{
-let change=(Math.random()*1000)-500;
-speed+=change;
-if(speed<4000) speed=4000;
-if(speed>20000) speed=20000;
-document.getElementById("speedText").innerText=Math.floor(speed)+" Mbps";
-let rotation=(speed/20000)*180-90;
-document.getElementById("needle").style.transform="rotate("+rotation+"deg)";
-},1000);
-generateFakeData();
+  setInterval(()=>{
+    let change=(Math.random()*1000)-500;
+    speed+=change;
+    if(speed<4000) speed=4000;
+    if(speed>20000) speed=20000;
+    document.getElementById("speedText").innerText=Math.floor(speed)+" Mbps";
+    let rotation=(speed/20000)*180-90;
+    document.getElementById("needle").style.transform="rotate("+rotation+"deg)";
+  },1000);
+  generateFakeData();
 }
 function generateFakeData(){
-let ip="192."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255);
-let ping=Math.floor(Math.random()*20+1)+" ms";
-let port=Math.floor(Math.random()*60000+1000);
-document.getElementById("ipInfo").innerText="IP: "+ip;
-document.getElementById("pingInfo").innerText="Ping: "+ping;
-document.getElementById("portInfo").innerText="Port: "+port;
+  let ip="192."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255);
+  let ping=Math.floor(Math.random()*20+1)+" ms";
+  let port=Math.floor(Math.random()*60000+1000);
+  document.getElementById("ipInfo").innerText="IP: "+ip;
+  document.getElementById("pingInfo").innerText="Ping: "+ping;
+  document.getElementById("portInfo").innerText="Port: "+port;
 }
 function toggleStats(){
-let s=document.getElementById("statsSection");
-s.style.display=s.style.display==="none"?"block":"none";
+  let s=document.getElementById("statsSection");
+  s.style.display=s.style.display==="none"?"block":"none";
 }
 
-/* Download + Rickroll */
+// === Download + Rickroll ===
 function startDownload(){
-let term=document.getElementById("terminal");
-term.style.display="block";
-term.innerHTML="";
-let lines=[
-"Initializing download...",
-"Scanning system...",
-"Virus detected...",
-"Launching exploit..."
+  let term=document.getElementById("terminal");
+  term.style.display="block";
+  term.innerHTML="";
+  let lines=[
+    "Initializing download...",
+    "Scanning system...",
+    "Virus detected...",
+    "Launching exploit..."
+  ];
+  let index=0;
+  function typeLine(){
+    if(index<lines.length){
+      let line=lines[index];
+      let charIndex=0;
+      let interval=setInterval(()=>{
+        if(charIndex<line.length){
+          term.innerHTML+=line[charIndex];
+          charIndex++;
+        } else {
+          clearInterval(interval);
+          term.innerHTML+="<br>";
+          index++;
+          setTimeout(typeLine,200);
+        }
+      },50);
+    } else {
+      setTimeout(()=>{
+        window.location.href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&autoplay=1";
+      },1000);
+    }
+  }
+  typeLine();
+}
+
+// === Links & Shuffle ===
+const allLinks=[
+  {url:"https://www.pointerpointer.com/", title:"Pointer Pointer"},
+  {url:"https://cat-bounce.com/", title:"Cat Bounce"},
+  {url:"https://www.staggeringbeauty.com/", title:"Staggering Beauty"},
+  {url:"https://hackertyper.net/", title:"Hacker Typer"},
+  {url:"https://theuselessweb.com/", title:"Useless Web"},
+  {url:"https://zoomquilt.org/", title:"Infinite Zoom"},
+  {url:"https://www.fallingfalling.com/", title:"Falling"},
+  {url:"https://heeeeeeeey.com/", title:"Heeeey"},
+  {url:"https://thatsthefinger.com/", title:"Thatsthefinger"},
+  {url:"https://r33b.net/", title:"R33B"},
+  {url:"https://bouncingdvdlogo.com/", title:"DVD Bounce"},
+  {url:"https://longdogechallenge.com/", title:"Long Doge"},
+  {url:"https://mondrianandme.com/", title:"Mondrian"},
+  {url:"https://eelslap.com/", title:"Eel Slap"},
+  {url:"https://isitchristmas.com/", title:"Is it Christmas"},
+  {url:"https://endless.horse/", title:"Endless Horse"},
+  {url:"https://checkboxrace.com/", title:"Checkbox Race"},
+  {url:"https://crouton.net/", title:"Crouton"},
+  {url:"https://smashthewalls.com/", title:"Smash Walls"},
+  {url:"https://koalastothemax.com/", title:"Koalas"}
 ];
-let index=0;
-function typeLine(){
-if(index<lines.length){
-let line=lines[index];
-let charIndex=0;
-let interval=setInterval(()=>{
-if(charIndex<line.length){
-term.innerHTML+=line[charIndex];
-charIndex++;
-}else{
-clearInterval(interval);
-term.innerHTML+="<br>";
-index++;
-setTimeout(typeLine,200);
-}
-},50);
-}else{
-setTimeout(()=>{window.location.href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&autoplay=1";},1000);
-}
-}
-typeLine();
+
+function initTopLinks(){
+  shuffleLinks();
 }
 
-/* Shuffle */
-const prankLinks=document.querySelectorAll(".links a");
-function shufflePrank(){
-let random=prankLinks[Math.floor(Math.random()*prankLinks.length)];
-window.open(random.href,"_blank");
+function shuffleLinks(){
+  const topLinksDiv=document.getElementById("topLinks");
+  topLinksDiv.innerHTML="";
+  const shuffled=[...allLinks].sort(()=>0.5-Math.random());
+  for(let i=0;i<5;i++){
+    const a=document.createElement("a");
+    a.href=shuffled[i].url;
+    a.target="_blank";
+    a.innerText=shuffled[i].title;
+    topLinksDiv.appendChild(a);
+  }
 }
 
-/* Popups */
+// === Popups / Easter Egg ===
 const celebrities=[
 "Elon Musk","Mark Zuckerberg","Jeff Bezos","Bill Gates",
 "Sundar Pichai","Tim Cook","Sam Altman","Satya Nadella",
@@ -209,13 +221,13 @@ const celebrities=[
 "Reed Hastings","Brian Chesky","Peter Thiel"
 ];
 function startPopups(){
-setInterval(()=>{
-let popup=document.getElementById("popupBox");
-let celeb=celebrities[Math.floor(Math.random()*celebrities.length)];
-popup.innerText=celeb+" just connected to this WiFi 🚀";
-popup.classList.add("show");
-setTimeout(()=>popup.classList.remove("show"),4000);
-},Math.random()*9000+4000);
+  setInterval(()=>{
+    let popup=document.getElementById("popupBox");
+    let celeb=celebrities[Math.floor(Math.random()*celebrities.length)];
+    popup.innerText=celeb+" just connected to this WiFi";
+    popup.classList.add("show");
+    setTimeout(()=>popup.classList.remove("show"),4000);
+  },Math.random()*9000+4000);
 }
 </script>
 
