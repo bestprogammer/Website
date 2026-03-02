@@ -3,302 +3,319 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Starlink Wi-Fi</title>
+<title>Welcome to Starlink WiFi</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{
-  background:black;
-  color:white;
-  font-family:Arial,sans-serif;
-  min-height:100vh;
-  overflow:auto;
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
+body{background:#000;color:#fff;overflow-x:hidden;}
+
+/* Boot Screen */
+#bootScreen{
+position:fixed;
+width:100%;
+height:100vh;
+background:#000;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+z-index:9999;
 }
 
-/* START SCREEN */
-#start-screen{
-  position:fixed;inset:0;background:black;
-  display:flex;flex-direction:column;
-  justify-content:center;align-items:center;
-  z-index:9999;
-}
-#start-title{font-size:3rem;color:#FFD700;margin-bottom:40px;}
-#boot-btn{padding:15px 35px;font-size:1.4rem;background:#111;color:white;border:none;border-radius:10px;cursor:pointer;}
-
-/* CONNECT OVERLAY */
-#connect-overlay{
-  position:fixed;inset:0;background:black;color:#00ff00;
-  font-family:Consolas,monospace;
-  padding:40px;
-  font-size:1.4rem;
-  display:none;
-  white-space:pre-wrap;
+.bootText{
+color:#00ff88;
+font-family:'Share Tech Mono',monospace;
+margin:5px 0;
+animation:blink 1s infinite alternate;
 }
 
-/* MAIN */
-#main{
-  display:none;
-  padding:20px;
-  background:linear-gradient(180deg,#000814,#001d3d);
+@keyframes blink{
+from{opacity:0.5;}
+to{opacity:1;}
 }
-
-#links{text-align:center;margin-bottom:15px;}
-#links a{margin:0 8px;color:#bbb;text-decoration:none;}
-#links a:hover{color:white;}
 
 button{
-  padding:10px 20px;
-  margin:10px auto;
-  border:none;border-radius:8px;
-  cursor:pointer;display:block;
+padding:12px 26px;
+margin:10px;
+background:#00ff88;
+border:none;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
 }
 
-#shuffle{background:#111;color:white;}
-#download{background:linear-gradient(45deg,#ff00cc,#3333ff);color:white;font-size:1.4rem;}
-#toggleDetails{background:#333;color:#0f0;}
+button:hover{
+transform:scale(1.05);
+}
 
-#text{text-align:center;font-size:1.6rem;margin:20px;}
+/* Overlay */
+#connectOverlay{
+position:fixed;
+width:100%;
+height:100vh;
+background:#000;
+display:none;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+z-index:8000;
+color:#00ff88;
+font-family:'Share Tech Mono',monospace;
+}
 
-#liveCounter{text-align:center;font-size:1.3rem;color:#0f0;margin:10px;}
+/* Main */
+#mainSite{
+display:none;
+padding:60px 20px;
+text-align:center;
+}
 
-#details{display:none;text-align:center;margin-top:20px;font-size:1.3rem;}
+h1{
+font-size:38px;
+margin-bottom:20px;
+}
 
+/* Speed Gauge */
+.gauge{
+width:260px;
+height:260px;
+border:6px solid #00ff88;
+border-radius:50%;
+margin:20px auto;
+position:relative;
+}
+
+.needle{
+width:4px;
+height:120px;
+background:#00ff88;
+position:absolute;
+bottom:50%;
+left:50%;
+transform-origin:bottom center;
+transform:rotate(-90deg);
+transition:0.8s ease-out;
+}
+
+.speedText{
+margin-top:15px;
+font-size:22px;
+}
+
+/* Popup */
+.popup{
+position:fixed;
+top:20px;
+right:-420px;
+background:#111;
+padding:15px 20px;
+border-left:4px solid #00ff88;
+color:#00ff88;
+font-size:14px;
+transition:0.6s ease;
+z-index:5000;
+}
+
+.popup.show{
+right:20px;
+}
+
+/* Terminal */
 #terminal{
-  position:fixed;
-  inset:0;
-  background:black;
-  color:#00ff00;
-  font-family:Consolas,monospace;
-  padding:20px;
-  display:none;
-  white-space:pre-wrap;
-  overflow:auto;
+display:none;
+position:fixed;
+width:100%;
+height:100vh;
+background:#000;
+color:#00ff00;
+font-family:'Share Tech Mono',monospace;
+padding:40px;
+z-index:9000;
+overflow:auto;
 }
 
-/* SPEEDOMETER */
-#speedometerContainer{
-  width:300px;
-  height:300px;
-  margin:20px auto;
-  position:relative;
+/* Links Section */
+.links{
+margin-top:40px;
+columns:2;
 }
-#speedometerCanvas{
-  width:300px;height:300px;
+
+.links a{
+display:block;
+margin:6px 0;
+color:#00ff88;
+text-decoration:none;
+}
+
+.links a:hover{
+text-decoration:underline;
 }
 </style>
 </head>
+
 <body>
 
-<div id="start-screen">
-  <div id="start-title">Welcome to Starlink Wi-Fi</div>
-  <button id="boot-btn">Connect</button>
+<!-- Boot Screen -->
+<div id="bootScreen">
+<div class="bootText">Booting system...</div>
+<div class="bootText">Loading drivers...</div>
+<div class="bootText">Scanning ports...</div>
+<div class="bootText">Preparing connection...</div>
+<h2 style="margin-top:20px;">Welcome to Starlink WiFi</h2>
+<button onclick="startConnect()">Connect</button>
 </div>
 
-<div id="connect-overlay"></div>
-
-<div id="main">
-  <div id="links"></div>
-  <button id="shuffle">🔀 Shuffle</button>
-
-  <div id="text">
-    FREE STARLINK WIFI.<br>
-    Very good. Not fake.<br>
-    Elon Musk approved.<br>
-    It free with Cybertruck.<br>
-    It from Temu satellite.
-  </div>
-
-  <div id="liveCounter">👥 5482 people using this WiFi now</div>
-
-  <button id="toggleDetails">🔎 Show Internet Stats</button>
-
-  <div id="details">
-    <div id="speedometerContainer">
-      <canvas id="speedometerCanvas" width="300" height="300"></canvas>
-    </div>
-    <div>
-      🚀 Download: <span id="downloadSpeed">0</span> Mbps<br>
-      📤 Upload: <span id="uploadSpeed">0</span> Mbps<br>
-      📡 Ping: <span id="ping">0</span> ms<br>
-      🌍 IP Address: <span id="ip">0.0.0.0</span><br>
-      🔌 Port: <span id="port">0</span><br>
-      🛰 Provider: Starlink Satellite Network<br>
-      📍 Location: Orbit above Switzerland
-    </div>
-  </div>
-
-  <button id="download">⬇ DOWNLOAD FREE WIFI</button>
+<!-- Overlay -->
+<div id="connectOverlay">
+<h2>Prepare to connect</h2>
+<p>Connecting with WiFi...</p>
+<p>Establishing secure satellite tunnel...</p>
 </div>
 
+<!-- Terminal -->
 <div id="terminal"></div>
+
+<!-- Main Site -->
+<div id="mainSite">
+<h1>🚀 Welcome to the Internet</h1>
+
+<p>Experien hig qualiti wifi .</p>
+<p>delon mustl appproverd.</p>
+<p>cool internat stets.</p>
+
+<button onclick="toggleStats()">📡 Toggle Internet Stats</button>
+<button onclick="shufflePrank()">🎲 Shuffle Prank</button>
+<button onclick="startDownload()">⬇ Download</button>
+
+<div id="statsSection" style="display:none;">
+
+<div class="gauge">
+<div class="needle" id="needle"></div>
+</div>
+
+<div class="speedText" id="speedText">0 Mbps</div>
+<p id="ipInfo"></p>
+<p id="pingInfo"></p>
+<p id="portInfo"></p>
+
+</div>
+
+<div class="links">
+
+<a href="https://www.pointerpointer.com/" target="_blank">👉 Pointer Pointer 😂</a>
+<a href="https://cat-bounce.com/" target="_blank">🐱 Cat Bounce</a>
+<a href="https://www.staggeringbeauty.com/" target="_blank">🕺 Staggering Beauty</a>
+<a href="https://hackertyper.net/" target="_blank">💻 Hacker Typer</a>
+<a href="https://theuselessweb.com/" target="_blank">🌍 Useless Web</a>
+<a href="https://zoomquilt.org/" target="_blank">🌀 Infinite Zoom</a>
+<a href="https://www.fallingfalling.com/" target="_blank">🌊 Falling</a>
+<a href="https://heeeeeeeey.com/" target="_blank">🎉 Heeeey</a>
+<a href="https://thatsthefinger.com/" target="_blank">🖕 Surprise</a>
+<a href="https://r33b.net/" target="_blank">🤯 R33B</a>
+<a href="https://bouncingdvdlogo.com/" target="_blank">📀 DVD Bounce</a>
+<a href="https://longdogechallenge.com/" target="_blank">🐶 Long Doge</a>
+<a href="https://mondrianandme.com/" target="_blank">🎨 Mondrian</a>
+<a href="https://eelslap.com/" target="_blank">🐟 Eel Slap</a>
+<a href="https://isitchristmas.com/" target="_blank">🎄 Christmas?</a>
+<a href="https://endless.horse/" target="_blank">🐴 Endless Horse</a>
+<a href="https://checkboxrace.com/" target="_blank">☑ Checkbox Race</a>
+<a href="https://crouton.net/" target="_blank">🍞 Crouton</a>
+<a href="https://smashthewalls.com/" target="_blank">🧱 Smash Walls</a>
+<a href="https://koalastothemax.com/" target="_blank">🐨 Koalas</a>
+
+</div>
+
+</div>
+
+<div class="popup" id="popupBox"></div>
 
 <script>
 
-/* ALL LINKS — FULL LIST */
-const prankLinks=[
-{url:"https://www.youtube.com/watch?v=xvFZjo5PgG0",label:"🎵 Rickroll"},
-{url:"https://fakeupdate.net/win10/",label:"🖥 Windows Update"},
-{url:"https://pointerpointer.com/",label:"🤑 Gewinnspiel"},
-{url:"https://omfgdogs.com/",label:"🐶 Hunde-Party"},
-{url:"https://theuselessweb.com/",label:"🌀 Useless Button"},
-{url:"https://endless.horse/",label:"🐴 Endless Horse"},
-{url:"https://heeeeeeeey.com/",label:"🎤 Heeeey!"},
-{url:"https://ninjaflex.com/",label:"🥷 Ninja Flex"},
-{url:"https://cat-bounce.com/",label:"🐱 Cat Bounce"},
-{url:"https://corndog.io/",label:"🌽 Corndog"},
-{url:"https://zoomquilt.org/",label:"🔍 Zoomquilt"},
-{url:"https://staggeringbeauty.com/",label:"💃 Staggering Beauty"},
-{url:"https://longdogechallenge.com/",label:"🐕 Long Doge"},
-{url:"https://www.patience-is-a-virtue.org/",label:"⏳ Patience"},
-{url:"https://thatsthefinger.com/",label:"🖕 The Finger"},
-{url:"https://isitchristmas.com/",label:"🎄 Christmas?"},
-{url:"https://trypap.com/",label:"✍ Password Fun"},
-{url:"https://www.rrrgggbbb.com/",label:"🌈 RGB"},
-{url:"https://beesbeesbees.com/",label:"🐝 Bees"},
-{url:"https://chrismckenzie.com/",label:"👀 Blink"},
-{url:"https://www.koalastothemax.com/",label:"🧩 Koala"},
-{url:"https://leekspin.com/",label:"🌀 Leekspin"},
-{url:"https://www.donothingfor2minutes.com/",label:"😌 Do Nothing"},
-{url:"https://pixelsfighting.com/",label:"🧱 Pixels"},
-{url:"https://eelslap.com/",label:"🐟 Eel Slap"},
-{url:"https://www.ismycomputeron.com/",label:"💻 Computer On?"},
-{url:"https://whatsmystarbucksname.com/",label:"☕ Starbucks"},
-{url:"https://shadyurl.com/",label:"🔗 Shady URL"},
-{url:"https://zombo.com/",label:"🌐 Zombo"},
-{url:"https://thisissand.com/",label:"🏖 Sand"},
-{url:"https://hasthelargehadroncolliderdestroyedtheworldyet.com/",label:"💥 LHC"},
-{url:"https://drawastickman.com/",label:"✏ Stickman"},
-{url:"https://burymewithmymoney.com/",label:"💸 Money"},
-{url:"https://corgiorgy.com/",label:"🐶 Corgi"},
-{url:"https://notsend.com/",label:"📧 Not Send"},
-{url:"https://www.ringingtelephone.com/",label:"☎ Ring"},
-{url:"https://www.hackertyper.com/",label:"👨‍💻 Hacker Typer"}
-];
+/* Connect Flow */
+function startConnect(){
+document.getElementById("bootScreen").style.display="none";
+document.getElementById("connectOverlay").style.display="flex";
 
-/* CELEBRITIES */
-const celebrities=[
-"Elon Musk","Mark Zuckerberg","Jeff Bezos","Bill Gates","Sundar Pichai","Tim Cook",
-"Taylor Swift","Dwayne Johnson","Kim Kardashian","MrBeast","Rihanna","Drake",
-"Cristiano Ronaldo","Lionel Messi","Oprah Winfrey","Sergey Brin","Larry Page",
-"Satya Nadella","Jack Dorsey","Susan Wojcicki","Sheryl Sandberg","Marc Andreessen",
-"Peter Thiel","Reid Hoffman","Evan Spiegel","Travis Kalanick","Daniel Ek",
-"Adam Neumann","Whitney Wolfe Herd","Brian Chesky","Drew Houston","Ben Silbermann",
-"Tony Fadell","John Collison","Patrick Collison","Elon Musk Jr.","Mark Zuckerberg Jr.",
-"George Hotz","Vitalik Buterin","Jack Ma","Lei Jun","Robin Li","Masayoshi Son",
-"Marc Benioff","Jensen Huang","Lisa Su","Andrew Ng","Fei-Fei Li"
-];
-
-/* SHUFFLE LINKS */
-function shuffleLinks(){
-  const container=document.getElementById("links");
-  container.innerHTML="";
-  prankLinks.sort(()=>0.5-Math.random()).slice(0,8).forEach(link=>{
-    const a=document.createElement("a");
-    a.href=link.url;
-    a.target="_blank";
-    a.textContent=link.label;
-    container.appendChild(a);
-  });
+setTimeout(()=>{
+document.getElementById("connectOverlay").style.display="none";
+document.getElementById("mainSite").style.display="block";
+startSpeed();
+startPopups();
+},3000);
 }
-document.getElementById("shuffle").onclick=shuffleLinks;
 
-/* CONNECT */
-document.getElementById("boot-btn").onclick=function(){
-  document.getElementById("start-screen").style.display="none";
-  const overlay=document.getElementById("connect-overlay");
-  overlay.style.display="block";
-  overlay.textContent="Prepare to connect...\n";
-  setTimeout(()=>overlay.textContent+="Connect with WiFi...\n",1500);
-  setTimeout(()=>overlay.textContent+="Booting Satellite Interface...\n",3000);
-  setTimeout(()=>overlay.textContent+="Proceed to the main site...\n",4500);
-  setTimeout(()=>{
-    overlay.style.display="none";
-    document.getElementById("main").style.display="block";
-  },6000);
-};
+/* Speed Simulation */
+let speed=7000;
 
-/* LIVE USERS */
-let users=5482;
+function startSpeed(){
 setInterval(()=>{
-  users+=Math.floor(Math.random()*11)-5;
-  document.getElementById("liveCounter").innerText="👥 "+users+" people using this WiFi now";
-},2000);
+let change=(Math.random()*1000)-500;
+speed+=change;
+if(speed<4000) speed=4000;
+if(speed>20000) speed=20000;
 
-/* DETAILS SPEEDOMETER */
-const canvas=document.getElementById("speedometerCanvas");
-const ctx=canvas.getContext("2d");
-let speed=500;
+document.getElementById("speedText").innerText=Math.floor(speed)+" Mbps";
+let rotation=(speed/20000)*180-90;
+document.getElementById("needle").style.transform="rotate("+rotation+"deg)";
+},1000);
 
-function drawGauge(speed){
-  ctx.clearRect(0,0,300,300);
-  ctx.beginPath();
-  ctx.arc(150,150,100,Math.PI,Math.PI*2);
-  ctx.strokeStyle="#222";
-  ctx.lineWidth=20;
-  ctx.stroke();
-
-  let angle=(speed/20000)*Math.PI;
-  ctx.beginPath();
-  ctx.arc(150,150,100,Math.PI,Math.PI+angle);
-  ctx.strokeStyle="#00ffcc";
-  ctx.lineWidth=20;
-  ctx.stroke();
-
-  ctx.fillStyle="white";
-  ctx.font="20px Arial";
-  ctx.textAlign="center";
-  ctx.fillText(speed+" Mbps",150,160);
+generateFakeData();
 }
 
-function updateDetails(){
-  speed += Math.floor(Math.random()*2000-1000);
-  if(speed<500) speed=500;
-  if(speed>20000) speed=20000;
+function generateFakeData(){
+let ip="192."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255);
+let ping=Math.floor(Math.random()*20+1)+" ms";
+let port=Math.floor(Math.random()*60000+1000);
 
-  document.getElementById("downloadSpeed").innerText=Math.floor(speed);
-  document.getElementById("uploadSpeed").innerText=Math.floor(speed/2);
-  document.getElementById("ping").innerText=Math.floor(Math.random()*40+5);
-  document.getElementById("ip").innerText=
-    Math.floor(Math.random()*255)+"."+
-    Math.floor(Math.random()*255)+"."+
-    Math.floor(Math.random()*255)+"."+
-    Math.floor(Math.random()*255);
-  document.getElementById("port").innerText=Math.floor(Math.random()*65535);
-
-  drawGauge(speed);
+document.getElementById("ipInfo").innerText="IP: "+ip;
+document.getElementById("pingInfo").innerText="Ping: "+ping;
+document.getElementById("portInfo").innerText="Port: "+port;
 }
-setInterval(updateDetails,800);
 
-document.getElementById("toggleDetails").onclick=function(){
-  const box=document.getElementById("details");
-  box.style.display=box.style.display==="none"?"block":"none";
-};
-
-/* DOWNLOAD TERMINAL */
-document.getElementById("download").onclick=function(){
-  const term=document.getElementById("terminal");
-  term.style.display="block";
-  term.textContent="Initializing secure download...\n";
-  setTimeout(()=>term.textContent+="Start virus detected...\n",500);
-  setTimeout(()=>term.textContent+="Virus compromised...\n",900);
-  setTimeout(()=>term.textContent+="Virus activated...\n",1200);
-  setTimeout(()=>{
-    window.location.href="https://www.youtube.com/watch?v=xvFZjo5PgG0&autoplay=1";
-  },1600);
-};
-
-/* POPUPS */
-function showPopup(){
-  const popup=document.createElement("div");
-  popup.className="popup";
-  popup.style.top=Math.random()*80+"%";
-  popup.style.left=Math.random()*80+"%";
-  popup.innerText=celebrities[Math.floor(Math.random()*celebrities.length)]+" connected to WiFi!";
-  document.body.appendChild(popup);
-  setTimeout(()=>popup.remove(),3000);
+function toggleStats(){
+let s=document.getElementById("statsSection");
+s.style.display=s.style.display==="none"?"block":"none";
 }
-setInterval(()=>{if(Math.random()<0.6)showPopup();},2000);
+
+/* Download + Rickroll */
+function startDownload(){
+let term=document.getElementById("terminal");
+term.style.display="block";
+term.innerHTML="Initializing download...<br>Scanning system...<br>Virus detected...<br>Launching exploit...<br>";
+
+setTimeout(()=>{
+window.location.href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&autoplay=1";
+},1000);
+}
+
+/* Shuffle */
+const prankLinks=document.querySelectorAll(".links a");
+function shufflePrank(){
+let random=prankLinks[Math.floor(Math.random()*prankLinks.length)];
+window.open(random.href,"_blank");
+}
+
+/* Popups */
+const celebrities=[
+"Elon Musk","Mark Zuckerberg","Jeff Bezos","Bill Gates",
+"Sundar Pichai","Tim Cook","Sam Altman","Satya Nadella",
+"Jensen Huang","Larry Page","Sergey Brin","Jack Dorsey",
+"Reed Hastings","Brian Chesky","Peter Thiel"
+];
+
+function startPopups(){
+setInterval(()=>{
+let popup=document.getElementById("popupBox");
+let celeb=celebrities[Math.floor(Math.random()*celebrities.length)];
+popup.innerText=celeb+" just connected to this WiFi 🚀";
+popup.classList.add("show");
+setTimeout(()=>popup.classList.remove("show"),4000);
+},Math.random()*9000+4000);
+}
 
 </script>
+
 </body>
 </html>
