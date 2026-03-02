@@ -6,27 +6,14 @@
 <title>FREE STARLINK WIFI</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
+*{margin:0;padding:0;box-sizing:border-box}
+
 body{
   background:black;
   color:white;
   height:100vh;
   overflow:hidden;
   font-family:Segoe UI,Arial,sans-serif;
-}
-
-/* START TEXT */
-#start-text{
-  position:fixed;
-  inset:0;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:4rem;
-  font-weight:bold;
-  color:#00ff00;
-  text-align:center;
-  z-index:10000;
 }
 
 /* LOADING */
@@ -39,7 +26,7 @@ body{
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  font-size:1.5rem;
+  font-size:1.2rem;
   z-index:9999;
 }
 
@@ -54,12 +41,49 @@ body{
   background:linear-gradient(180deg,#000814,#001d3d);
 }
 
-#links{text-align:center;font-size:1rem;}
-#links a{color:#bbb;margin:0 10px;text-decoration:none;}
-#links a:hover{color:white;}
-#shuffle{display:block;margin:15px auto;padding:8px 15px;background:#111;border:none;color:white;cursor:pointer;}
-#text{text-align:center;font-size:2rem;font-weight:600;line-height:1.8;margin-top:20px;}
-#download{width:80%;margin:20px auto;padding:20px;font-size:2rem;border:none;border-radius:12px;cursor:pointer;background:linear-gradient(45deg,#ff00cc,#3333ff);color:white;}
+#links{
+  text-align:center;
+  font-size:1rem;
+}
+
+#links a{
+  color:#bbb;
+  margin:0 10px;
+  text-decoration:none;
+}
+
+#links a:hover{
+  color:white;
+}
+
+#shuffle{
+  display:block;
+  margin:15px auto;
+  padding:8px 15px;
+  background:#111;
+  border:none;
+  color:white;
+  cursor:pointer;
+}
+
+#text{
+  text-align:center;
+  font-size:2.2rem;
+  font-weight:600;
+  line-height:1.8;
+}
+
+#download{
+  width:80%;
+  margin:20px auto;
+  padding:20px;
+  font-size:2rem;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  background:linear-gradient(45deg,#ff00cc,#3333ff);
+  color:white;
+}
 
 /* TERMINAL */
 #terminal{
@@ -76,13 +100,28 @@ body{
 }
 
 /* OCTOCAT */
-#secretBtn{position:fixed;bottom:20px;right:20px;display:none;padding:10px 15px;background:#222;border:none;color:white;cursor:pointer;z-index:9999;}
-#octocat{position:fixed;bottom:60px;left:-200px;width:140px;transition:left 5s linear;}
+#secretBtn{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  display:none;
+  padding:10px 15px;
+  background:#222;
+  border:none;
+  color:white;
+  cursor:pointer;
+}
+
+#octocat{
+  position:fixed;
+  bottom:60px;
+  left:-200px;
+  width:140px;
+  transition:left 5s linear;
+}
 </style>
 </head>
 <body>
-
-<div id="start-text">STARTING OVERDRIVE</div>
 
 <div id="loading-overlay">
 Booting FREE STARLINK WiFi...<br>
@@ -114,7 +153,9 @@ Launching Interface...
 <img id="octocat" src="https://github.githubassets.com/images/modules/logos_page/Octocat.png">
 
 <script>
-/* ================= LINKS ================= */
+
+/* ================= 45 LINKS ================= */
+
 const prankLinks=[
 {url:"https://www.youtube.com/watch?v=xvFZjo5PgG0",label:"🎵 Rickroll"},
 {url:"https://fakeupdate.net/win10/",label:"🖥 Windows Update"},
@@ -169,39 +210,41 @@ function shuffleLinks(){
 
 shuffleLinks();
 
-/* ================= START TEXT + LOADING ================= */
+/* LOADING DELAY */
 setTimeout(()=>{
-  document.getElementById("start-text").style.display="none";
   document.getElementById("loading-overlay").style.display="none";
   document.getElementById("main").style.display="flex";
 },2500);
 
-/* ================= DOWNLOAD TERMINAL ================= */
+/* DOWNLOAD TERMINAL CHAOS */
 function startDownload(){
   document.getElementById("main").style.display="none";
   const term=document.getElementById("terminal");
   term.style.display="block";
 
   let percent=0;
+
   const interval=setInterval(()=>{
     let line="";
     const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789{}[]<>/\\#$%^&*";
-    for(let i=0;i<140;i++){
+    for(let i=0;i<120;i++){
       line+=chars[Math.floor(Math.random()*chars.length)];
     }
+
     term.textContent+=line+"\n";
     percent++;
-    if(percent>160){
+
+    if(percent>150){
       clearInterval(interval);
       term.textContent+="\nSYSTEM OVERRIDE...\nFINALIZING CONNECTION...\n";
       setTimeout(()=>{
         window.location.href="https://www.youtube.com/watch?v=xvFZjo5PgG0&autoplay=1";
-      },1200);
+      },1500);
     }
-  },15);
+  },20);
 }
 
-/* ================= OCTOCAT ================= */
+/* OCTOCAT */
 let clicks=0;
 document.addEventListener("click",()=>{
   clicks++;
@@ -209,12 +252,13 @@ document.addEventListener("click",()=>{
     document.getElementById("secretBtn").style.display="block";
   }
 });
+
 function runCat(){
   const cat=document.getElementById("octocat");
   cat.style.left="120vw";
   setTimeout(()=>{cat.style.left="-200px";},5000);
 }
-</script>
 
+</script>
 </body>
 </html>
