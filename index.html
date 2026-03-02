@@ -8,39 +8,29 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:black;color:white;height:100vh;overflow:hidden;font-family:Arial,sans-serif;}
-
-/* MAIN FULLSCREEN */
-#main{
-  position:fixed;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:25px;background:linear-gradient(180deg,#000814,#001d3d);
+#loading-overlay{
+  position:fixed;top:0;left:0;width:100%;height:100%;background:black;color:#00ff00;
+  font-family:monospace;font-size:1.2rem;padding:40px;z-index:9999;display:flex;
+  flex-direction:column;justify-content:center;align-items:center;text-align:center;
 }
-
-/* LINKS */
-#links{font-size:0.85rem;line-height:1.7}
-#links a{color:#aaa;margin-right:10px;text-decoration:none}
-#links a:hover{color:white}
-
-/* SHUFFLE */
-#shuffle{margin-top:12px;padding:8px 14px;background:#111;color:white;border:none;cursor:pointer}
-
-/* TEXT CENTER */
-#text{text-align:center;font-size:2rem;font-family:"Comic Sans MS",cursive;line-height:1.7}
-
-/* DOWNLOAD */
-#download{width:100%;padding:20px;font-size:2rem;background:linear-gradient(45deg,#ff00cc,#3333ff);color:white;border:none;cursor:pointer}
-
-/* TERMINAL */
-#terminal{position:fixed;inset:0;background:black;color:#00ff00;font-family:monospace;padding:20px;display:none;overflow:auto;white-space:pre-wrap}
-
-/* SECRET BUTTON */
-#secretBtn{position:fixed;bottom:20px;right:20px;padding:10px 15px;background:#222;color:white;border:none;display:none;cursor:pointer;z-index:9999}
-
-/* OCTOCAT ANIMATION */
-#octocat{position:fixed;bottom:50px;left:-200px;width:150px;z-index:9998;transition:left 5s linear;transform:rotate(0deg);}
+.terminal-line{margin-bottom:5px;}
+#main{position:fixed;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:25px;background:linear-gradient(180deg,#000814,#001d3d);display:none;}
+#links{font-size:1rem;line-height:1.7;text-align:center;}
+#links a{color:#aaa;margin:0 8px;text-decoration:none;}
+#links a:hover{color:white;}
+#shuffle{margin:12px auto;padding:8px 14px;background:#111;color:white;border:none;cursor:pointer;display:block;}
+#text{text-align:center;font-size:2rem;font-family:"Comic Sans MS",cursive;line-height:2;margin-top:20px;}
+#download{width:80%;margin:20px auto;padding:20px;font-size:2rem;background:linear-gradient(45deg,#ff00cc,#3333ff);color:white;border:none;cursor:pointer;display:block;border-radius:12px;}
+#terminal{position:fixed;inset:0;background:black;color:#00ff00;font-family:monospace;padding:20px;display:none;overflow:auto;white-space:pre-wrap;font-size:1.2rem;}
+#secretBtn{position:fixed;bottom:20px;right:20px;padding:10px 15px;background:#222;color:white;border:none;display:none;cursor:pointer;z-index:9999;}
+#octocat{position:fixed;bottom:50px;left:-200px;width:150px;z-index:9998;transition:left 5s linear;}
 #octocat.jump{animation:jump 1s infinite alternate;}
 @keyframes jump{0%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-20px) rotate(10deg);}100%{transform:translateY(0) rotate(-10deg);}}
 </style>
 </head>
 <body>
+
+<div id="loading-overlay"></div>
 
 <div id="main">
   <div>
@@ -66,7 +56,6 @@ body{background:black;color:white;height:100vh;overflow:hidden;font-family:Arial
 <img id="octocat" src="https://github.githubassets.com/images/modules/logos_page/Octocat.png">
 
 <script>
-/* ORIGINAL 45 LINKS WITH NAME + EMOJI */
 const prankLinks=[
 {url:"https://www.youtube.com/watch?v=xvFZjo5PgG0",label:"🎵 Rickroll"},
 {url:"https://fakeupdate.net/win10/",label:"🖥 Windows Update"},
@@ -120,7 +109,34 @@ function shuffleLinks(){
 }
 shuffleLinks();
 
-/* TERMINAL GLITCH */
+/* ================= LOADING ================= */
+const overlay=document.getElementById("loading-overlay");
+const loadLines=[
+"Booting FREE STARLINK WiFi v9.9...",
+"Connecting to Temu satellite...",
+"Verifying Elon Musk approval...",
+"Initializing Cybertruck interface...",
+"Injecting Galactic Internet packets...",
+"Preparing download system...",
+"System stable... Launching interface..."
+];
+
+let li=0;
+function addLine(){
+  if(li<loadLines.length){
+    const div=document.createElement("div");
+    div.className="terminal-line";
+    div.textContent=loadLines[li];
+    overlay.appendChild(div);
+    li++;
+    setTimeout(addLine,600);
+  } else {
+    setTimeout(()=>{overlay.style.display="none";document.getElementById("main").style.display="flex";},800);
+  }
+}
+addLine();
+
+/* ================= TERMINAL DOWNLOAD + GLITCH BEFORE REDIRECT ================= */
 function startTerminal(){
   document.getElementById("main").style.display="none";
   const term=document.getElementById("terminal");
@@ -155,21 +171,23 @@ function loadPercent(){
   const term=document.getElementById("terminal");
   let percent=0;
   const interval=setInterval(()=>{
-    term.innerHTML="Downloading Galactic WiFi: "+percent+"%\n";
+    let glitch="";
+    for(let j=0;j<20;j++){glitch+=String.fromCharCode(33+Math.floor(Math.random()*94));}
+    term.innerHTML="Downloading Galactic WiFi: "+percent+"% "+glitch+"\n";
     percent++;
-    if(percent>100){clearInterval(interval);term.innerHTML+="\nConnection established.\nRedirecting...\n";
-      setTimeout(()=>{window.location.href="https://www.youtube.com/watch?v=xvFZjo5PgG0";},2000);}
+    if(percent>100){clearInterval(interval);
+      term.innerHTML+="\nConnection established.\nApplying final glitch...\n";
+      setTimeout(()=>{window.location.href="https://www.youtube.com/watch?v=xvFZjo5PgG0";},1200);
+    }
   },25);
 }
 
-/* EASTER EGG CLICK COUNTER */
+/* ================= EASTER EGG ================= */
 let clickCount=0;
 document.addEventListener("click",()=>{
   clickCount++;
   if(clickCount===20){document.getElementById("secretBtn").style.display="block";}
 });
-
-/* OCTOCAT RUN */
 function runCat(){
   const cat=document.getElementById("octocat");
   cat.classList.add("jump");
