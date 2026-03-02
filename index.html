@@ -6,31 +6,90 @@
 <title>FREE STARLINK WIFI</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:black;color:white;height:100vh;overflow:hidden;font-family:Arial,sans-serif;}
-#loading-overlay{
-  position:fixed;top:0;left:0;width:100%;height:100%;background:black;color:#00ff00;
-  font-family:monospace;font-size:1.2rem;padding:40px;z-index:9999;display:flex;
-  flex-direction:column;justify-content:center;align-items:center;text-align:center;
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:black;
+  color:white;
+  height:100vh;
+  overflow:hidden;
+  font-family:Segoe UI,Arial,sans-serif;
 }
-.terminal-line{margin-bottom:5px;}
-#main{position:fixed;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:25px;background:linear-gradient(180deg,#000814,#001d3d);display:none;}
-#links{font-size:1rem;line-height:1.7;text-align:center;}
-#links a{color:#aaa;margin:0 8px;text-decoration:none;}
+
+/* START TEXT */
+#start-text{
+  position:fixed;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:4rem;
+  font-weight:bold;
+  color:#00ff00;
+  text-align:center;
+  z-index:10000;
+}
+
+/* LOADING */
+#loading-overlay{
+  position:fixed;inset:0;
+  background:black;
+  color:#00ff00;
+  font-family:Consolas,monospace;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  font-size:1.5rem;
+  z-index:9999;
+}
+
+/* MAIN */
+#main{
+  position:fixed;
+  inset:0;
+  display:none;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:30px;
+  background:linear-gradient(180deg,#000814,#001d3d);
+}
+
+#links{text-align:center;font-size:1rem;}
+#links a{color:#bbb;margin:0 10px;text-decoration:none;}
 #links a:hover{color:white;}
-#shuffle{margin:12px auto;padding:8px 14px;background:#111;color:white;border:none;cursor:pointer;display:block;}
-#text{text-align:center;font-size:2rem;font-family:"Comic Sans MS",cursive;line-height:2;margin-top:20px;}
-#download{width:80%;margin:20px auto;padding:20px;font-size:2rem;background:linear-gradient(45deg,#ff00cc,#3333ff);color:white;border:none;cursor:pointer;display:block;border-radius:12px;}
-#terminal{position:fixed;inset:0;background:black;color:#00ff00;font-family:monospace;padding:20px;display:none;overflow:auto;white-space:pre-wrap;font-size:1.2rem;}
-#secretBtn{position:fixed;bottom:20px;right:20px;padding:10px 15px;background:#222;color:white;border:none;display:none;cursor:pointer;z-index:9999;}
-#octocat{position:fixed;bottom:50px;left:-200px;width:150px;z-index:9998;transition:left 5s linear;}
-#octocat.jump{animation:jump 1s infinite alternate;}
-@keyframes jump{0%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-20px) rotate(10deg);}100%{transform:translateY(0) rotate(-10deg);}}
+#shuffle{display:block;margin:15px auto;padding:8px 15px;background:#111;border:none;color:white;cursor:pointer;}
+#text{text-align:center;font-size:2rem;font-weight:600;line-height:1.8;margin-top:20px;}
+#download{width:80%;margin:20px auto;padding:20px;font-size:2rem;border:none;border-radius:12px;cursor:pointer;background:linear-gradient(45deg,#ff00cc,#3333ff);color:white;}
+
+/* TERMINAL */
+#terminal{
+  position:fixed;
+  inset:0;
+  background:black;
+  color:#00ff00;
+  font-family:Consolas,monospace;
+  font-size:1rem;
+  padding:20px;
+  display:none;
+  overflow:hidden;
+  white-space:pre;
+}
+
+/* OCTOCAT */
+#secretBtn{position:fixed;bottom:20px;right:20px;display:none;padding:10px 15px;background:#222;border:none;color:white;cursor:pointer;z-index:9999;}
+#octocat{position:fixed;bottom:60px;left:-200px;width:140px;transition:left 5s linear;}
 </style>
 </head>
 <body>
 
-<div id="loading-overlay"></div>
+<div id="start-text">STARTING OVERDRIVE</div>
+
+<div id="loading-overlay">
+Booting FREE STARLINK WiFi...<br>
+Connecting to Temu Satellite...<br>
+Authorizing Elon Musk...<br>
+Launching Interface...
+</div>
 
 <div id="main">
   <div>
@@ -43,11 +102,10 @@ body{background:black;color:white;height:100vh;overflow:hidden;font-family:Arial
     Very good. Not fake.<br>
     Elon Musk approved.<br>
     It free with Cybertruck.<br>
-    It from Temu satellite.<br>
-    100% real space internet.
+    It from Temu satellite.
   </div>
 
-  <button id="download" onclick="startTerminal()">⬇️ DOWNLOAD FREE WIFI</button>
+  <button id="download" onclick="startDownload()">⬇ DOWNLOAD FREE WIFI</button>
 </div>
 
 <div id="terminal"></div>
@@ -56,6 +114,7 @@ body{background:black;color:white;height:100vh;overflow:hidden;font-family:Arial
 <img id="octocat" src="https://github.githubassets.com/images/modules/logos_page/Octocat.png">
 
 <script>
+/* ================= LINKS ================= */
 const prankLinks=[
 {url:"https://www.youtube.com/watch?v=xvFZjo5PgG0",label:"🎵 Rickroll"},
 {url:"https://fakeupdate.net/win10/",label:"🖥 Windows Update"},
@@ -69,30 +128,30 @@ const prankLinks=[
 {url:"https://corndog.io/",label:"🌽 Corndog"},
 {url:"https://zoomquilt.org/",label:"🔍 Zoomquilt"},
 {url:"https://staggeringbeauty.com/",label:"💃 Staggering Beauty"},
-{url:"https://longdogechallenge.com/",label:"🐕 Long Doge Challenge"},
-{url:"https://www.patience-is-a-virtue.org/",label:"⏳ Patience Game"},
+{url:"https://longdogechallenge.com/",label:"🐕 Long Doge"},
+{url:"https://www.patience-is-a-virtue.org/",label:"⏳ Patience"},
 {url:"https://thatsthefinger.com/",label:"🖕 The Finger"},
 {url:"https://isitchristmas.com/",label:"🎄 Christmas?"},
-{url:"https://trypap.com/",label:"✍️ Passive Aggressive Passwords"},
-{url:"https://www.rrrgggbbb.com/",label:"🌈 RGB Madness"},
-{url:"https://beesbeesbees.com/",label:"🐝 Bees Everywhere"},
-{url:"https://chrismckenzie.com/",label:"👀 Creepy Blink"},
-{url:"https://www.koalastothemax.com/",label:"🧩 Koalas to the Max"},
+{url:"https://trypap.com/",label:"✍ Password Fun"},
+{url:"https://www.rrrgggbbb.com/",label:"🌈 RGB"},
+{url:"https://beesbeesbees.com/",label:"🐝 Bees"},
+{url:"https://chrismckenzie.com/",label:"👀 Blink"},
+{url:"https://www.koalastothemax.com/",label:"🧩 Koala"},
 {url:"https://leekspin.com/",label:"🌀 Leekspin"},
-{url:"https://www.donothingfor2minutes.com/",label:"😌 Zen Timer"},
-{url:"https://pixelsfighting.com/",label:"🧱 Pixels Fighting"},
-{url:"https://eelslap.com/",label:"🐟 Slap with an Eel"},
-{url:"https://www.ismycomputeron.com/",label:"💻 Is My Computer On?"},
-{url:"https://whatsmystarbucksname.com/",label:"☕ Starbucks Name?"},
-{url:"https://shadyurl.com/",label:"🔗 Shady URL Generator"},
-{url:"https://zombo.com/",label:"🌐 ZomboCom"},
-{url:"https://thisissand.com/",label:"🏖️ Sand Art"},
-{url:"https://hasthelargehadroncolliderdestroyedtheworldyet.com/",label:"💥 LHC Check"},
-{url:"https://drawastickman.com/",label:"✏️ Draw a Stickman"},
-{url:"https://burymewithmymoney.com/",label:"💸 Bury Me with $"},
-{url:"https://corgiorgy.com/",label:"🐶 Corgi Orgy"},
-{url:"https://notsend.com/",label:"📧 Not Send Email"},
-{url:"https://www.ringingtelephone.com/",label:"☎️ Ring Ring!"},
+{url:"https://www.donothingfor2minutes.com/",label:"😌 Do Nothing"},
+{url:"https://pixelsfighting.com/",label:"🧱 Pixels"},
+{url:"https://eelslap.com/",label:"🐟 Eel Slap"},
+{url:"https://www.ismycomputeron.com/",label:"💻 Computer On?"},
+{url:"https://whatsmystarbucksname.com/",label:"☕ Starbucks"},
+{url:"https://shadyurl.com/",label:"🔗 Shady URL"},
+{url:"https://zombo.com/",label:"🌐 Zombo"},
+{url:"https://thisissand.com/",label:"🏖 Sand"},
+{url:"https://hasthelargehadroncolliderdestroyedtheworldyet.com/",label:"💥 LHC"},
+{url:"https://drawastickman.com/",label:"✏ Stickman"},
+{url:"https://burymewithmymoney.com/",label:"💸 Money"},
+{url:"https://corgiorgy.com/",label:"🐶 Corgi"},
+{url:"https://notsend.com/",label:"📧 Not Send"},
+{url:"https://www.ringingtelephone.com/",label:"☎ Ring"},
 {url:"https://www.hackertyper.com/",label:"👨‍💻 Hacker Typer"}
 ];
 
@@ -107,92 +166,53 @@ function shuffleLinks(){
     container.appendChild(a);
   });
 }
+
 shuffleLinks();
 
-/* ================= LOADING ================= */
-const overlay=document.getElementById("loading-overlay");
-const loadLines=[
-"Booting FREE STARLINK WiFi v9.9...",
-"Connecting to Temu satellite...",
-"Verifying Elon Musk approval...",
-"Initializing Cybertruck interface...",
-"Injecting Galactic Internet packets...",
-"Preparing download system...",
-"System stable... Launching interface..."
-];
+/* ================= START TEXT + LOADING ================= */
+setTimeout(()=>{
+  document.getElementById("start-text").style.display="none";
+  document.getElementById("loading-overlay").style.display="none";
+  document.getElementById("main").style.display="flex";
+},2500);
 
-let li=0;
-function addLine(){
-  if(li<loadLines.length){
-    const div=document.createElement("div");
-    div.className="terminal-line";
-    div.textContent=loadLines[li];
-    overlay.appendChild(div);
-    li++;
-    setTimeout(addLine,600);
-  } else {
-    setTimeout(()=>{overlay.style.display="none";document.getElementById("main").style.display="flex";},800);
-  }
-}
-addLine();
-
-/* ================= TERMINAL DOWNLOAD + GLITCH BEFORE REDIRECT ================= */
-function startTerminal(){
+/* ================= DOWNLOAD TERMINAL ================= */
+function startDownload(){
   document.getElementById("main").style.display="none";
   const term=document.getElementById("terminal");
   term.style.display="block";
-  term.innerHTML="";
 
-  const lines=[
-"FREE STARLINK WIFI SYSTEM v9.9.9",
-"Connecting to Temu Satellite...",
-"Verifying Elon Musk approval...",
-"Cybertruck detected...",
-"Initializing Galactic Internet..."
-  ];
-
-  let i=0;
-  function randomChar(){const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*";return chars[Math.floor(Math.random()*chars.length)];}
-  function typeLine(text,callback){
-    let progress=0;
-    const interval=setInterval(()=>{
-      let output="";
-      for(let j=0;j<text.length;j++){output+= j<progress ? text[j] : randomChar();}
-      term.innerHTML="\n"+output;
-      progress++;
-      if(progress>text.length){clearInterval(interval);term.innerHTML+="\n";callback();}
-    },30);
-  }
-  function next(){if(i<lines.length){typeLine(lines[i],()=>{i++;next();});} else {loadPercent();}}
-  next();
-}
-
-function loadPercent(){
-  const term=document.getElementById("terminal");
   let percent=0;
   const interval=setInterval(()=>{
-    let glitch="";
-    for(let j=0;j<20;j++){glitch+=String.fromCharCode(33+Math.floor(Math.random()*94));}
-    term.innerHTML="Downloading Galactic WiFi: "+percent+"% "+glitch+"\n";
-    percent++;
-    if(percent>100){clearInterval(interval);
-      term.innerHTML+="\nConnection established.\nApplying final glitch...\n";
-      setTimeout(()=>{window.location.href="https://www.youtube.com/watch?v=xvFZjo5PgG0";},1200);
+    let line="";
+    const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789{}[]<>/\\#$%^&*";
+    for(let i=0;i<140;i++){
+      line+=chars[Math.floor(Math.random()*chars.length)];
     }
-  },25);
+    term.textContent+=line+"\n";
+    percent++;
+    if(percent>160){
+      clearInterval(interval);
+      term.textContent+="\nSYSTEM OVERRIDE...\nFINALIZING CONNECTION...\n";
+      setTimeout(()=>{
+        window.location.href="https://www.youtube.com/watch?v=xvFZjo5PgG0&autoplay=1";
+      },1200);
+    }
+  },15);
 }
 
-/* ================= EASTER EGG ================= */
-let clickCount=0;
+/* ================= OCTOCAT ================= */
+let clicks=0;
 document.addEventListener("click",()=>{
-  clickCount++;
-  if(clickCount===20){document.getElementById("secretBtn").style.display="block";}
+  clicks++;
+  if(clicks===20){
+    document.getElementById("secretBtn").style.display="block";
+  }
 });
 function runCat(){
   const cat=document.getElementById("octocat");
-  cat.classList.add("jump");
   cat.style.left="120vw";
-  setTimeout(()=>{cat.classList.remove("jump"); cat.style.left="-200px";},5000);
+  setTimeout(()=>{cat.style.left="-200px";},5000);
 }
 </script>
 
