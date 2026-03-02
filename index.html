@@ -4,48 +4,93 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Starlink Wi-Fi</title>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:black;color:white;font-family:Arial,sans-serif;height:100vh;overflow:hidden;}
+body{
+  background:black;
+  color:white;
+  font-family:Arial,sans-serif;
+  min-height:100vh;
+  overflow:auto;
+}
 
-/* STARTSCREEN */
+/* START SCREEN */
 #start-screen{
   position:fixed;inset:0;background:black;
   display:flex;flex-direction:column;
   justify-content:center;align-items:center;
   z-index:9999;
 }
-#start-title{font-size:3rem;color:#FFD700;margin-bottom:40px;text-align:center;}
+#start-title{font-size:3rem;color:#FFD700;margin-bottom:40px;}
 #boot-btn{padding:15px 35px;font-size:1.4rem;background:#111;color:white;border:none;border-radius:10px;cursor:pointer;}
 
-/* LOADING */
-#loading{
+/* CONNECT OVERLAY */
+#connect-overlay{
   position:fixed;inset:0;background:black;color:#00ff00;
-  font-family:Consolas,monospace;padding:30px;
-  font-size:1.3rem;white-space:pre-wrap;display:none;
+  font-family:Consolas,monospace;
+  padding:40px;
+  font-size:1.4rem;
+  display:none;
+  white-space:pre-wrap;
 }
 
 /* MAIN */
 #main{
-  display:none;position:fixed;inset:0;padding:20px;
+  display:none;
+  padding:20px;
   background:linear-gradient(180deg,#000814,#001d3d);
-  display:flex;flex-direction:column;justify-content:space-between;
-  transition:1s;
 }
-#links{text-align:center;margin-bottom:10px;}
+
+#links{text-align:center;margin-bottom:15px;}
 #links a{margin:0 8px;color:#bbb;text-decoration:none;}
 #links a:hover{color:white;}
-button{padding:10px 20px;margin:10px auto;border:none;border-radius:8px;cursor:pointer;}
+
+button{
+  padding:10px 20px;
+  margin:10px auto;
+  border:none;border-radius:8px;
+  cursor:pointer;display:block;
+}
+
 #shuffle{background:#111;color:white;}
-#spinBtn{display:none;background:#333;color:yellow;}
-#statsBtn{background:#222;color:#0ff;}
 #download{background:linear-gradient(45deg,#ff00cc,#3333ff);color:white;font-size:1.4rem;}
-#text{text-align:center;font-size:1.6rem;margin:15px;}
-#liveCounter{text-align:center;font-size:1.3rem;color:#0f0;margin:5px;}
-#stats{display:none;font-family:Consolas,monospace;color:#0ff;margin:10px;text-align:center;}
-#graphContainer{width:80%;margin:10px auto;}
-.bar{height:25px;margin:8px 0;background:linear-gradient(90deg,#00ffcc,#0066ff);width:0%;border-radius:6px;transition:width 0.8s;}
-.popup{position:fixed;right:20px;bottom:20px;background:#111;color:#0f0;padding:10px 15px;border-radius:8px;font-size:0.9rem;opacity:0.95;transition:all 0.5s;}
+#toggleDetails{background:#333;color:#0f0;}
+
+#text{text-align:center;font-size:1.6rem;margin:20px;}
+
+#liveCounter{text-align:center;font-size:1.3rem;color:#0f0;margin:10px;}
+
+#graphContainer{width:80%;margin:20px auto;}
+.bar{
+  height:25px;margin:10px 0;
+  background:linear-gradient(90deg,#00ffcc,#0066ff);
+  width:0%;
+  border-radius:6px;
+  transition:width 0.5s ease;
+}
+
+.popup{
+  position:fixed;
+  background:#111;
+  color:#0f0;
+  padding:10px 15px;
+  border-radius:8px;
+  font-size:0.9rem;
+  opacity:0.95;
+}
+
+#terminal{
+  position:fixed;
+  inset:0;
+  background:black;
+  color:#00ff00;
+  font-family:Consolas,monospace;
+  padding:20px;
+  display:none;
+  white-space:pre-wrap;
+  overflow:auto;
+}
 </style>
 </head>
 <body>
@@ -55,13 +100,12 @@ button{padding:10px 20px;margin:10px auto;border:none;border-radius:8px;cursor:p
   <button id="boot-btn">Connect</button>
 </div>
 
-<div id="loading"></div>
+<div id="connect-overlay"></div>
 
 <div id="main">
-  <div>
-    <div id="links"></div>
-    <button id="shuffle">🔀 Shuffle</button>
-  </div>
+
+  <div id="links"></div>
+  <button id="shuffle">🔀 Shuffle</button>
 
   <div id="text">
     FREE STARLINK WIFI.<br>
@@ -74,21 +118,34 @@ button{padding:10px 20px;margin:10px auto;border:none;border-radius:8px;cursor:p
   <div id="liveCounter">👥 5482 people using this WiFi now</div>
 
   <div id="graphContainer">
-    <div>🚀 Download Speed</div>
+    🚀 Download Speed
     <div class="bar" id="downloadBar"></div>
-    <div>📤 Upload Speed</div>
+    📤 Upload Speed
     <div class="bar" id="uploadBar"></div>
   </div>
 
-  <button id="statsBtn">📊 Show Internet Stats</button>
-  <div id="stats"></div>
+  <button id="toggleDetails">🔎 Show Details</button>
+
+  <div id="details" style="display:none; text-align:center; margin-top:20px;">
+    <canvas id="speedometer" width="300" height="300"></canvas>
+    <div style="margin-top:15px; font-size:1.3rem;">
+      🚀 Download: <span id="downloadSpeed">0</span> Mbps<br>
+      📤 Upload: <span id="uploadSpeed">0</span> Mbps<br>
+      📡 Ping: <span id="ping">0</span> ms<br>
+      🌍 IP Address: <span id="ip">0.0.0.0</span><br>
+      🛰 Provider: Starlink Satellite Network<br>
+      📍 Location: Orbit above Switzerland
+    </div>
+  </div>
 
   <button id="download">⬇ DOWNLOAD FREE WIFI</button>
-  <button id="spinBtn">🌪 Website spinnt!</button>
 </div>
 
+<div id="terminal"></div>
+
 <script>
-/* ================= ALL LINKS WITH EMOJIS ================= */
+
+/* ALL LINKS — FULL LIST */
 const prankLinks=[
 {url:"https://www.youtube.com/watch?v=xvFZjo5PgG0",label:"🎵 Rickroll"},
 {url:"https://fakeupdate.net/win10/",label:"🖥 Windows Update"},
@@ -129,133 +186,142 @@ const prankLinks=[
 {url:"https://www.hackertyper.com/",label:"👨‍💻 Hacker Typer"}
 ];
 
-/* ================= SHUFFLE BUTTON ================= */
-let shuffleClicks=0;
+/* ALL CELEBRITIES */
+const celebrities=[
+"Elon Musk",
+"Mark Zuckerberg",
+"Jeff Bezos",
+"Bill Gates",
+"Sundar Pichai",
+"Tim Cook",
+"Taylor Swift",
+"Dwayne Johnson",
+"Kim Kardashian",
+"MrBeast",
+"Rihanna",
+"Drake",
+"Cristiano Ronaldo",
+"Lionel Messi",
+"Oprah Winfrey"
+];
+
 function shuffleLinks(){
   const container=document.getElementById("links");
   container.innerHTML="";
-  prankLinks.sort(()=>0.5-Math.random()).slice(0,6).forEach(link=>{
+  prankLinks.sort(()=>0.5-Math.random()).slice(0,8).forEach(link=>{
     const a=document.createElement("a");
     a.href=link.url;
     a.target="_blank";
     a.textContent=link.label;
     container.appendChild(a);
   });
-  shuffleClicks++;
-  if(shuffleClicks>=20){
-    document.getElementById("spinBtn").style.display="block";
-  }
 }
-document.getElementById("shuffle").onclick=shuffleLinks;
 shuffleLinks();
+document.getElementById("shuffle").onclick=shuffleLinks;
 
-/* ================= LIVE COUNTER ================= */
-let users=5482;
-setInterval(()=>{
-  users+=Math.floor(Math.random()*11)-5;
-  document.getElementById("liveCounter").innerText="👥 "+users+" people using this WiFi now";
-},2000);
+/* CONNECT */
+document.getElementById("boot-btn").onclick=function(){
+  document.getElementById("start-screen").style.display="none";
+  const overlay=document.getElementById("connect-overlay");
+  overlay.style.display="block";
+  overlay.textContent="Prepare to connect...\n";
+  setTimeout(()=>overlay.textContent+="Connect with WiFi...\n",1000);
+  setTimeout(()=>overlay.textContent+="Proceed to the main site...\n",2000);
+  setTimeout(()=>{
+    overlay.style.display="none";
+    document.getElementById("main").style.display="block";
+  },3000);
+};
 
-/* ================= SPEED GRAPH ================= */
+/* SPEED BARS */
 function updateSpeed(){
   const down=Math.floor(Math.random()*900)+100;
   const up=Math.floor(Math.random()*500)+50;
   document.getElementById("downloadBar").style.width=(down/10)+"%";
   document.getElementById("uploadBar").style.width=(up/10)+"%";
 }
-setInterval(updateSpeed,1500);
-updateSpeed();
+setInterval(updateSpeed,500);
 
-/* ================= FAKE STATS ================= */
-document.getElementById("statsBtn").onclick=function(){
-  const stats=document.getElementById("stats");
-  if(stats.style.display==="none"){
-    stats.style.display="block";
-    stats.innerHTML=`IP: 192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}<br>
-Port: ${Math.floor(Math.random()*60000)+1000}<br>
-Ping: ${Math.floor(Math.random()*50)+5} ms<br>
-Download Speed: ${Math.floor(Math.random()*900)+100} Mbps<br>
-Upload Speed: ${Math.floor(Math.random()*500)+50} Mbps`;
-  } else {stats.style.display="none";}
+/* LIVE USERS */
+let users=5482;
+setInterval(()=>{
+  users+=Math.floor(Math.random()*11)-5;
+  document.getElementById("liveCounter").innerText="👥 "+users+" people using this WiFi now";
+},2000);
+
+/* SPEEDOMETER */
+const canvas=document.getElementById("speedometer");
+const ctx=canvas.getContext("2d");
+
+function drawGauge(speed){
+  ctx.clearRect(0,0,300,300);
+  ctx.beginPath();
+  ctx.arc(150,150,100,Math.PI,Math.PI*2);
+  ctx.strokeStyle="#222";
+  ctx.lineWidth=20;
+  ctx.stroke();
+
+  let angle=(speed/1000)*Math.PI;
+  ctx.beginPath();
+  ctx.arc(150,150,100,Math.PI,Math.PI+angle);
+  ctx.strokeStyle="#00ffcc";
+  ctx.lineWidth=20;
+  ctx.stroke();
+
+  ctx.fillStyle="white";
+  ctx.font="20px Arial";
+  ctx.textAlign="center";
+  ctx.fillText(speed+" Mbps",150,160);
+}
+
+function updateDetails(){
+  const down=Math.floor(Math.random()*900)+100;
+  const up=Math.floor(Math.random()*400)+50;
+  const ping=Math.floor(Math.random()*40)+5;
+
+  document.getElementById("downloadSpeed").innerText=down;
+  document.getElementById("uploadSpeed").innerText=up;
+  document.getElementById("ping").innerText=ping;
+  document.getElementById("ip").innerText=
+    Math.floor(Math.random()*255)+"."+
+    Math.floor(Math.random()*255)+"."+
+    Math.floor(Math.random()*255)+"."+
+    Math.floor(Math.random()*255);
+
+  drawGauge(down);
+}
+setInterval(updateDetails,800);
+
+document.getElementById("toggleDetails").onclick=function(){
+  const box=document.getElementById("details");
+  box.style.display=box.style.display==="none"?"block":"none";
 };
 
-/* ================= DOWNLOAD / TERMINAL ================= */
+/* DOWNLOAD */
 document.getElementById("download").onclick=function(){
-  const term=document.getElementById("loading");
-  document.getElementById("main").style.display="none";
+  const term=document.getElementById("terminal");
   term.style.display="block";
-  const messages=[
-    "Start Downloading...",
-    "Virus Comprimised...",
-    "Virus Decomprimised...",
-    "Virus Installed...",
-    "Virus Activated...",
-    "SYSTEM HACKED..."
-  ];
-  let percent=0,msgIndex=0;
-  const interval=setInterval(()=>{
-    let line="";
-    const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789{}[]<>/\\#$%^&*";
-    for(let i=0;i<140;i++){line+=chars[Math.floor(Math.random()*chars.length)];}
-    term.textContent+=line+"\n";
-    percent++;
-    if(percent%50===0 && msgIndex<messages.length){term.textContent+=messages[msgIndex]+"\n";msgIndex++;}
-    if(percent>250){clearInterval(interval);term.textContent+="\nSYSTEM OVERRIDE COMPLETE...\n";
-      setTimeout(()=>{window.location.href="https://www.youtube.com/watch?v=xvFZjo5PgG0&autoplay=1";},1500);}
-  },15);
+  term.textContent="Initializing secure download...\n";
+  setTimeout(()=>term.textContent+="Start virus detected...\n",500);
+  setTimeout(()=>term.textContent+="Virus compromised...\n",800);
+  setTimeout(()=>term.textContent+="Virus activated...\n",1000);
+  setTimeout(()=>{
+    window.location.href="https://www.youtube.com/watch?v=xvFZjo5PgG0&autoplay=1";
+  },1200);
 };
 
-/* ================= SPIN WEBSITE ================= */
-document.getElementById("spinBtn").onclick=function(){
-  const main=document.getElementById("main");
-  main.style.transform="rotate(720deg) scale(1.1)";
-  setTimeout(()=>{main.style.transform="rotate(0deg) scale(1)";},2000);
-};
-
-/* ================= POPUPS ================= */
-const celebrities=[
-"Elon Musk","Mark Zuckerberg","Jeff Bezos","Bill Gates","Sundar Pichai","Tim Cook","Larry Page","Sergey Brin","Jack Dorsey","Satya Nadella",
-"Sheryl Sandberg","Susan Wojcicki","Evan Spiegel","Reed Hastings","Daniel Ek","Travis Kalanick","Brian Chesky","Marc Andreessen","Peter Thiel","Steve Wozniak",
-"Adam Neumann","Drew Houston","Jan Koum","Evan Williams","Whitney Wolfe Herd","Tony Hsieh","Elon Musk Jr.","Mark Cuban","Richard Branson","Larry Ellison",
-"Michael Dell","Jerry Yang","David Filo","Meg Whitman","Vinod Khosla","Marc Lore","Patrick Collison","John Collison","Anne Wojcicki","Paul Allen",
-"George Hotz","Stewart Butterfield","Ben Silbermann","Kevin Systrom","Mike Krieger","Dara Khosrowshahi","Evan Sharp","Travis VanderZanden","Daniel Zhang","Lei Jun"
-];
+/* POPUPS */
 function showPopup(){
   const popup=document.createElement("div");
   popup.className="popup";
-  popup.innerText=`${celebrities[Math.floor(Math.random()*celebrities.length)]} has just connected to WiFi!`;
+  popup.style.top=Math.random()*80+"%";
+  popup.style.left=Math.random()*80+"%";
+  popup.innerText=celebrities[Math.floor(Math.random()*celebrities.length)]+" connected to WiFi!";
   document.body.appendChild(popup);
-  setTimeout(()=>{popup.remove();},3000);
+  setTimeout(()=>popup.remove(),3000);
 }
-setInterval(()=>{if(Math.random()<0.5){showPopup();}},1500+Math.random()*3500);
+setInterval(()=>{if(Math.random()<0.6)showPopup();},2000);
 
-/* ================= BOOTING ================= */
-document.getElementById("boot-btn").onclick=function(){
-  const loading=document.getElementById("loading");
-  document.getElementById("start-screen").style.display="none";
-  loading.style.display="block";
-  const bootLines=[
-    "Booting FREE STARLINK WiFi...",
-    "Connecting to Temu Satellite...",
-    "Authorizing Elon Musk...",
-    "Launching Interface..."
-  ];
-  let lineIndex=0,charIndex=0;
-  function typeLine(){
-    if(lineIndex<bootLines.length){
-      if(charIndex<bootLines[lineIndex].length){
-        loading.textContent+=bootLines[lineIndex][charIndex];
-        charIndex++;
-        setTimeout(typeLine,50);
-      } else {
-        loading.textContent+="\n";
-        lineIndex++; charIndex=0;
-        setTimeout(typeLine,200);
-      }
-    } else {setTimeout(()=>{loading.style.display="none";document.getElementById("main").style.display="flex";},500);}
-  }
-  typeLine();
-};
 </script>
 </body>
 </html>
