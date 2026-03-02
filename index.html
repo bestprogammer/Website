@@ -4,157 +4,51 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Welcome to Starlink WiFi</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
 body{background:#000;color:#fff;overflow-x:hidden;}
 
 /* Boot Screen */
 #bootScreen{
-position:fixed;
-width:100%;
-height:100vh;
-background:#000;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-z-index:9999;
+position:fixed;width:100%;height:100vh;background:#000;
+display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;
 }
-
-.bootText{
-color:#00ff88;
-font-family:'Share Tech Mono',monospace;
-margin:5px 0;
-animation:blink 1s infinite alternate;
-}
-
-@keyframes blink{
-from{opacity:0.5;}
-to{opacity:1;}
-}
-
-button{
-padding:12px 26px;
-margin:10px;
-background:#00ff88;
-border:none;
-font-weight:bold;
-cursor:pointer;
-transition:0.3s;
-}
-
-button:hover{
-transform:scale(1.05);
-}
+.bootText{color:#00ff88;font-family:'Share Tech Mono',monospace;margin:5px 0;animation:blink 1s infinite alternate;}
+@keyframes blink{from{opacity:0.5;}to{opacity:1;}}
+button{padding:12px 26px;margin:10px;background:#00ff88;border:none;font-weight:bold;cursor:pointer;transition:0.3s;}
+button:hover{transform:scale(1.05);}
 
 /* Overlay */
 #connectOverlay{
-position:fixed;
-width:100%;
-height:100vh;
-background:#000;
-display:none;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-z-index:8000;
-color:#00ff88;
+position:fixed;width:100%;height:100vh;background:#000;display:none;
+flex-direction:column;align-items:center;justify-content:center;z-index:8000;color:#00ff88;
 font-family:'Share Tech Mono',monospace;
 }
 
 /* Main */
-#mainSite{
-display:none;
-padding:60px 20px;
-text-align:center;
-}
-
-h1{
-font-size:38px;
-margin-bottom:20px;
-}
+#mainSite{display:none;padding:60px 20px;text-align:center;}
+h1{font-size:38px;margin-bottom:20px;}
 
 /* Speed Gauge */
-.gauge{
-width:260px;
-height:260px;
-border:6px solid #00ff88;
-border-radius:50%;
-margin:20px auto;
-position:relative;
-}
-
-.needle{
-width:4px;
-height:120px;
-background:#00ff88;
-position:absolute;
-bottom:50%;
-left:50%;
-transform-origin:bottom center;
-transform:rotate(-90deg);
-transition:0.8s ease-out;
-}
-
-.speedText{
-margin-top:15px;
-font-size:22px;
-}
+.gauge{width:260px;height:260px;border:6px solid #00ff88;border-radius:50%;margin:20px auto;position:relative;}
+.needle{width:4px;height:120px;background:#00ff88;position:absolute;bottom:50%;left:50%;transform-origin:bottom center;transform:rotate(-90deg);transition:0.8s ease-out;}
+.speedText{margin-top:15px;font-size:22px;}
 
 /* Popup */
-.popup{
-position:fixed;
-top:20px;
-right:-420px;
-background:#111;
-padding:15px 20px;
-border-left:4px solid #00ff88;
-color:#00ff88;
-font-size:14px;
-transition:0.6s ease;
-z-index:5000;
-}
-
-.popup.show{
-right:20px;
-}
+.popup{position:fixed;top:20px;right:-420px;background:#111;padding:15px 20px;border-left:4px solid #00ff88;color:#00ff88;font-size:14px;transition:0.6s ease;z-index:5000;}
+.popup.show{right:20px;}
 
 /* Terminal */
-#terminal{
-display:none;
-position:fixed;
-width:100%;
-height:100vh;
-background:#000;
-color:#00ff00;
-font-family:'Share Tech Mono',monospace;
-padding:40px;
-z-index:9000;
-overflow:auto;
-}
+#terminal{display:none;position:fixed;width:100%;height:100vh;background:#000;color:#00ff00;font-family:'Share Tech Mono',monospace;padding:40px;z-index:9000;overflow:auto;}
 
 /* Links Section */
-.links{
-margin-top:40px;
-columns:2;
-}
-
-.links a{
-display:block;
-margin:6px 0;
-color:#00ff88;
-text-decoration:none;
-}
-
-.links a:hover{
-text-decoration:underline;
-}
+.links{margin-top:40px;columns:2;}
+.links a{display:block;margin:6px 0;color:#00ff88;text-decoration:none;}
+.links a:hover{text-decoration:underline;}
+.buttonRow{margin-top:20px;}
 </style>
 </head>
-
 <body>
 
 <!-- Boot Screen -->
@@ -180,30 +74,27 @@ text-decoration:underline;
 <!-- Main Site -->
 <div id="mainSite">
 <h1>🚀 Welcome to the Internet</h1>
-
 <p>Experien hig qualiti wifi .</p>
 <p>delon mustl appproverd.</p>
 <p>cool internat stets.</p>
 
-<button onclick="toggleStats()">📡 Toggle Internet Stats</button>
+<div class="buttonRow">
 <button onclick="shufflePrank()">🎲 Shuffle Prank</button>
+<button onclick="toggleStats()">📡 Toggle Internet Stats</button>
 <button onclick="startDownload()">⬇ Download</button>
+</div>
 
 <div id="statsSection" style="display:none;">
-
 <div class="gauge">
 <div class="needle" id="needle"></div>
 </div>
-
 <div class="speedText" id="speedText">0 Mbps</div>
 <p id="ipInfo"></p>
 <p id="pingInfo"></p>
 <p id="portInfo"></p>
-
 </div>
 
 <div class="links">
-
 <a href="https://www.pointerpointer.com/" target="_blank">👉 Pointer Pointer 😂</a>
 <a href="https://cat-bounce.com/" target="_blank">🐱 Cat Bounce</a>
 <a href="https://www.staggeringbeauty.com/" target="_blank">🕺 Staggering Beauty</a>
@@ -224,20 +115,16 @@ text-decoration:underline;
 <a href="https://crouton.net/" target="_blank">🍞 Crouton</a>
 <a href="https://smashthewalls.com/" target="_blank">🧱 Smash Walls</a>
 <a href="https://koalastothemax.com/" target="_blank">🐨 Koalas</a>
-
 </div>
-
 </div>
 
 <div class="popup" id="popupBox"></div>
 
 <script>
-
 /* Connect Flow */
 function startConnect(){
 document.getElementById("bootScreen").style.display="none";
 document.getElementById("connectOverlay").style.display="flex";
-
 setTimeout(()=>{
 document.getElementById("connectOverlay").style.display="none";
 document.getElementById("mainSite").style.display="block";
@@ -248,32 +135,26 @@ startPopups();
 
 /* Speed Simulation */
 let speed=7000;
-
 function startSpeed(){
 setInterval(()=>{
 let change=(Math.random()*1000)-500;
 speed+=change;
 if(speed<4000) speed=4000;
 if(speed>20000) speed=20000;
-
 document.getElementById("speedText").innerText=Math.floor(speed)+" Mbps";
 let rotation=(speed/20000)*180-90;
 document.getElementById("needle").style.transform="rotate("+rotation+"deg)";
 },1000);
-
 generateFakeData();
 }
-
 function generateFakeData(){
 let ip="192."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255);
 let ping=Math.floor(Math.random()*20+1)+" ms";
 let port=Math.floor(Math.random()*60000+1000);
-
 document.getElementById("ipInfo").innerText="IP: "+ip;
 document.getElementById("pingInfo").innerText="Ping: "+ping;
 document.getElementById("portInfo").innerText="Port: "+port;
 }
-
 function toggleStats(){
 let s=document.getElementById("statsSection");
 s.style.display=s.style.display==="none"?"block":"none";
@@ -283,11 +164,34 @@ s.style.display=s.style.display==="none"?"block":"none";
 function startDownload(){
 let term=document.getElementById("terminal");
 term.style.display="block";
-term.innerHTML="Initializing download...<br>Scanning system...<br>Virus detected...<br>Launching exploit...<br>";
-
-setTimeout(()=>{
-window.location.href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&autoplay=1";
-},1000);
+term.innerHTML="";
+let lines=[
+"Initializing download...",
+"Scanning system...",
+"Virus detected...",
+"Launching exploit..."
+];
+let index=0;
+function typeLine(){
+if(index<lines.length){
+let line=lines[index];
+let charIndex=0;
+let interval=setInterval(()=>{
+if(charIndex<line.length){
+term.innerHTML+=line[charIndex];
+charIndex++;
+}else{
+clearInterval(interval);
+term.innerHTML+="<br>";
+index++;
+setTimeout(typeLine,200);
+}
+},50);
+}else{
+setTimeout(()=>{window.location.href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&autoplay=1";},1000);
+}
+}
+typeLine();
 }
 
 /* Shuffle */
@@ -304,7 +208,6 @@ const celebrities=[
 "Jensen Huang","Larry Page","Sergey Brin","Jack Dorsey",
 "Reed Hastings","Brian Chesky","Peter Thiel"
 ];
-
 function startPopups(){
 setInterval(()=>{
 let popup=document.getElementById("popupBox");
@@ -314,7 +217,6 @@ popup.classList.add("show");
 setTimeout(()=>popup.classList.remove("show"),4000);
 },Math.random()*9000+4000);
 }
-
 </script>
 
 </body>
