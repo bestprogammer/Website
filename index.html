@@ -3,166 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Originake Starlink WiFi</title>
+<title>FREE STARLINK WIFI</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{
-  font-family:"Segoe UI",sans-serif;
-  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  color:white;
+body{background:black;color:white;height:100vh;overflow:hidden;font-family:Arial,sans-serif;}
+
+/* MAIN FULLSCREEN */
+#main{
+  position:fixed;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:25px;background:linear-gradient(180deg,#000814,#001d3d);
 }
 
-/* INTRO */
-#intro{
-  position:fixed;inset:0;
-  background:black;
-  display:flex;align-items:center;justify-content:center;
-  z-index:20000;
-}
-.glitch{
-  font-size:clamp(2rem,6vw,4rem);
-  font-weight:bold;
-  position:relative;
-  animation:skew 1s infinite alternate;
-}
-.glitch::before,.glitch::after{
-  content:attr(data-text);
-  position:absolute;left:0;width:100%;
-}
-.glitch::before{color:red;transform:translate(-4px,-2px)}
-.glitch::after{color:blue;transform:translate(4px,2px)}
-@keyframes skew{0%{transform:skew(0)}50%{transform:skew(2deg)}100%{transform:skew(-2deg)}}
+/* LINKS */
+#links{font-size:0.85rem;line-height:1.7}
+#links a{color:#aaa;margin-right:10px;text-decoration:none}
+#links a:hover{color:white}
 
-/* BIOS + TERMINAL */
-#bios,#terminal,#hack-screen{
-  position:fixed;inset:0;
-  background:black;color:#00ff00;
-  font-family:monospace;
-  padding:5vw;
-  display:none;
-  overflow:auto;
-  z-index:15000;
-}
-#terminal span{color:#00ffff}
+/* SHUFFLE */
+#shuffle{margin-top:12px;padding:8px 14px;background:#111;color:white;border:none;cursor:pointer}
 
-/* MAIN UI */
-.aero{
-  backdrop-filter:blur(25px);
-  background:rgba(255,255,255,0.08);
-  padding:2.5rem;
-  border-radius:20px;
-  box-shadow:0 10px 40px rgba(0,0,0,0.6);
-  text-align:center;
-  width:min(95vw,700px);
-  display:none;
-}
-h1{margin-bottom:1rem;text-transform:uppercase}
-.description{
-  font-size:0.95rem;
-  opacity:0.85;
-  margin-bottom:1rem;
-  line-height:1.3;
-  font-family:monospace;
-}
+/* TEXT CENTER */
+#text{text-align:center;font-size:2rem;font-family:"Comic Sans MS",cursive;line-height:1.7}
 
-/* BUTTONS */
-.menu{margin-bottom:0.8rem;font-size:0.75rem}
-.menu a{margin:0 4px;color:#ddd;text-decoration:none}
-.menu a:hover{color:white}
+/* DOWNLOAD */
+#download{width:100%;padding:20px;font-size:2rem;background:linear-gradient(45deg,#ff00cc,#3333ff);color:white;border:none;cursor:pointer}
 
-.shuffle-btn{background:#222;color:white;font-size:0.75rem;padding:0.4rem 0.8rem;margin-bottom:0.5rem}
-.download-btn{background:linear-gradient(45deg,#ff00cc,#3333ff);color:white;font-size:1.5rem;padding:1rem 2rem;display:block;margin:0.6rem auto}
+/* TERMINAL */
+#terminal{position:fixed;inset:0;background:black;color:#00ff00;font-family:monospace;padding:20px;display:none;overflow:auto;white-space:pre-wrap}
+
+/* SECRET BUTTON */
+#secretBtn{position:fixed;bottom:20px;right:20px;padding:10px 15px;background:#222;color:white;border:none;display:none;cursor:pointer;z-index:9999}
+
+/* OCTOCAT ANIMATION */
+#octocat{position:fixed;bottom:50px;left:-200px;width:150px;z-index:9998;transition:left 5s linear;transform:rotate(0deg);}
+#octocat.jump{animation:jump 1s infinite alternate;}
+@keyframes jump{0%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-20px) rotate(10deg);}100%{transform:translateY(0) rotate(-10deg);}}
 </style>
 </head>
 <body>
 
-<div id="intro">
-  <div class="glitch" data-text="ORIGINAKE STARLINK">ORIGINAKE STARLINK</div>
-</div>
-
-<div id="bios"></div>
-<div id="terminal"></div>
-<div id="hack-screen"></div>
-
-<div class="aero" id="main">
-  <h1>🔥 Starlink WiFi</h1>
-  <div class="description">
-    uhhh.. connectz 2 satellitez.. vry fast.. elon like.. wow.. signal good.. satellitez fun
+<div id="main">
+  <div>
+    <div id="links"></div>
+    <button id="shuffle" onclick="shuffleLinks()">🔀 Shuffle</button>
   </div>
 
-  <button class="shuffle-btn" onclick="shuffleLinks()">🔀 shuffle</button>
-  <button class="download-btn" onclick="startFakeHack()">⬇️ download</button>
+  <div id="text">
+    FREE STARLINK WIFI.<br>
+    Very good. Not fake.<br>
+    Elon Musk approved.<br>
+    It free with Cybertruck.<br>
+    It from Temu satellite.<br>
+    100% real space internet.
+  </div>
 
-  <div class="menu" id="prank-menu"></div>
+  <button id="download" onclick="startTerminal()">⬇️ DOWNLOAD FREE WIFI</button>
 </div>
 
+<div id="terminal"></div>
+
+<button id="secretBtn" onclick="runCat()">🐱 Launch Octocat</button>
+<img id="octocat" src="https://github.githubassets.com/images/modules/logos_page/Octocat.png">
+
 <script>
-/* INTRO */
-setTimeout(()=>{intro.style.display="none";startBIOS();},2500);
-
-/* BIOS */
-const bios=document.getElementById("bios");
-const terminal=document.getElementById("terminal");
-const main=document.getElementById("main");
-const hackScreen=document.getElementById("hack-screen");
-
-const biosLines=[
-"Phoenix BIOS v12.4.7",
-"Memory Test: 32768MB OK",
-"Init Satellitez Array...",
-"Auth Space Relay...",
-"Booting Starlink WiFi OS..."
-];
-
-let i=0;
-function typeLines(target,lines,callback){
-  if(i<lines.length){
-    let line=document.createElement("div");target.appendChild(line);
-    let text=lines[i];let j=0;
-    let typing=setInterval(()=>{
-      line.textContent+=text[j];j++;
-      if(j>=text.length){clearInterval(typing);i++;setTimeout(()=>typeLines(target,lines,callback),150);}
-    },15);
-  }else{i=0;setTimeout(callback,800);}
-}
-function startBIOS(){bios.style.display="block";typeLines(bios,biosLines,()=>{bios.style.display="none";startTerminal();});}
-
-/* TERMINAL % */
-function startTerminal(){
-  terminal.style.display="block";
-  terminal.innerHTML="Connecting to satellitez... <span>0%</span>";
-  let percent=0;
-  let span=terminal.querySelector("span");
-  let load=setInterval(()=>{
-    percent++;span.textContent=percent+"%";
-    if(percent>=100){clearInterval(load);terminal.innerHTML+="<br>Link UP ✔";setTimeout(()=>{terminal.style.display="none";main.style.display="block";},1000);}
-  },20);
-}
-
-/* FAKE HACK */
-function startFakeHack(){
-  main.style.display="none";
-  hackScreen.style.display="block";
-  hackScreen.innerHTML="Downloading secret data... <span>0%</span>";
-  let percent=0;
-  let span=hackScreen.querySelector("span");
-  let load=setInterval(()=>{
-    percent++;span.textContent=percent+"%";
-    if(percent===60){hackScreen.innerHTML+="<br><br>⚠ warning.. detectz";}
-    if(percent>=100){clearInterval(load);hackScreen.innerHTML+="<br>Redirect...";setTimeout(()=>{window.location.href="https://www.youtube.com/watch?v=xvFZjo5PgG0";},1500);}
-  },25);
-}
-
-/* LINKS */
+/* ORIGINAL 45 LINKS WITH NAME + EMOJI */
 const prankLinks=[
-{url:"https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1",label:"🎵 Rickroll"},
-{url:"https://fakeupdate.net/win10/",label:"🖥️ Windows Update"},
+{url:"https://www.youtube.com/watch?v=xvFZjo5PgG0",label:"🎵 Rickroll"},
+{url:"https://fakeupdate.net/win10/",label:"🖥 Windows Update"},
 {url:"https://pointerpointer.com/",label:"🤑 Gewinnspiel"},
 {url:"https://omfgdogs.com/",label:"🐶 Hunde-Party"},
 {url:"https://theuselessweb.com/",label:"🌀 Useless Button"},
@@ -201,13 +108,75 @@ const prankLinks=[
 ];
 
 function shuffleLinks(){
-  const menu=document.getElementById("prank-menu");
-  menu.innerHTML="";
+  const container=document.getElementById("links");
+  container.innerHTML="";
   prankLinks.sort(()=>0.5-Math.random()).slice(0,6).forEach(link=>{
-    const a=document.createElement("a");a.href=link.url;a.target="_blank";a.textContent=link.label;menu.appendChild(a);
+    const a=document.createElement("a");
+    a.href=link.url;
+    a.target="_blank";
+    a.textContent=link.label;
+    container.appendChild(a);
   });
 }
 shuffleLinks();
+
+/* TERMINAL GLITCH */
+function startTerminal(){
+  document.getElementById("main").style.display="none";
+  const term=document.getElementById("terminal");
+  term.style.display="block";
+  term.innerHTML="";
+
+  const lines=[
+"FREE STARLINK WIFI SYSTEM v9.9.9",
+"Connecting to Temu Satellite...",
+"Verifying Elon Musk approval...",
+"Cybertruck detected...",
+"Initializing Galactic Internet..."
+  ];
+
+  let i=0;
+  function randomChar(){const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*";return chars[Math.floor(Math.random()*chars.length)];}
+  function typeLine(text,callback){
+    let progress=0;
+    const interval=setInterval(()=>{
+      let output="";
+      for(let j=0;j<text.length;j++){output+= j<progress ? text[j] : randomChar();}
+      term.innerHTML="\n"+output;
+      progress++;
+      if(progress>text.length){clearInterval(interval);term.innerHTML+="\n";callback();}
+    },30);
+  }
+  function next(){if(i<lines.length){typeLine(lines[i],()=>{i++;next();});} else {loadPercent();}}
+  next();
+}
+
+function loadPercent(){
+  const term=document.getElementById("terminal");
+  let percent=0;
+  const interval=setInterval(()=>{
+    term.innerHTML="Downloading Galactic WiFi: "+percent+"%\n";
+    percent++;
+    if(percent>100){clearInterval(interval);term.innerHTML+="\nConnection established.\nRedirecting...\n";
+      setTimeout(()=>{window.location.href="https://www.youtube.com/watch?v=xvFZjo5PgG0";},2000);}
+  },25);
+}
+
+/* EASTER EGG CLICK COUNTER */
+let clickCount=0;
+document.addEventListener("click",()=>{
+  clickCount++;
+  if(clickCount===20){document.getElementById("secretBtn").style.display="block";}
+});
+
+/* OCTOCAT RUN */
+function runCat(){
+  const cat=document.getElementById("octocat");
+  cat.classList.add("jump");
+  cat.style.left="120vw";
+  setTimeout(()=>{cat.classList.remove("jump"); cat.style.left="-200px";},5000);
+}
 </script>
+
 </body>
 </html>
