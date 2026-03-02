@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -59,56 +59,25 @@ body{
   border-radius:20px;
   box-shadow:0 10px 40px rgba(0,0,0,0.6);
   text-align:center;
-  width:min(95vw,900px);
+  width:min(95vw,700px);
   display:none;
 }
-h1{margin-bottom:1rem}
+h1{margin-bottom:1rem;text-transform:uppercase}
 .description{
-  font-size:0.9rem;
+  font-size:0.95rem;
   opacity:0.85;
-  margin-bottom:1.5rem;
-  line-height:1.4;
+  margin-bottom:1rem;
+  line-height:1.3;
+  font-family:monospace;
 }
-.menu{margin-bottom:1rem;font-size:0.85rem}
-.menu a{margin:0 6px;color:#ddd;text-decoration:none}
-.menu a:hover{color:white}
-button{
-  padding:0.8rem 1.5rem;
-  border:none;
-  border-radius:12px;
-  cursor:pointer;
-  margin:0.4rem;
-}
-.download-btn{
-  background:linear-gradient(45deg,#ff00cc,#3333ff);
-  color:white;
-  transform:scale(0.1);
-  animation:grow 1.2s forwards, float 2s infinite ease-in-out 1.2s;
-}
-@keyframes grow{to{transform:scale(1)}}
-@keyframes float{
-  0%{transform:scale(1) translateY(0)}
-  50%{transform:scale(1.05) translateY(-8px)}
-  100%{transform:scale(1) translateY(0)}
-}
-.shuffle-btn{background:#222;color:white}
 
-/* GRAPH */
-.graph{
-  width:100%;
-  height:120px;
-  background:#111;
-  margin-top:1rem;
-  border-radius:10px;
-  overflow:hidden;
-  position:relative;
-}
-.line{
-  position:absolute;
-  bottom:0;
-  width:2px;
-  background:#00ffcc;
-}
+/* BUTTONS */
+.menu{margin-bottom:0.8rem;font-size:0.75rem}
+.menu a{margin:0 4px;color:#ddd;text-decoration:none}
+.menu a:hover{color:white}
+
+.shuffle-btn{background:#222;color:white;font-size:0.75rem;padding:0.4rem 0.8rem;margin-bottom:0.5rem}
+.download-btn{background:linear-gradient(45deg,#ff00cc,#3333ff);color:white;font-size:1.5rem;padding:1rem 2rem;display:block;margin:0.6rem auto}
 </style>
 </head>
 <body>
@@ -122,22 +91,15 @@ button{
 <div id="hack-screen"></div>
 
 <div class="aero" id="main">
-  <h1>🚀 Originake Starlink WiFi</h1>
+  <h1>🔥 Starlink WiFi</h1>
   <div class="description">
-    Connecting to private low-orbit satellite infrastructure.<br>
-    Routing via encrypted mesh network nodes.<br>
-    Powered by experimental aerospace uplink technology.<br>
-    Global coverage simulation enabled.<br><br>
-    Satellite cluster sync: ACTIVE<br>
-    Deep Space Relay: CONNECTED
+    uhhh.. connectz 2 satellitez.. vry fast.. elon like.. wow.. signal good.. satellitez fun
   </div>
+
+  <button class="shuffle-btn" onclick="shuffleLinks()">🔀 shuffle</button>
+  <button class="download-btn" onclick="startFakeHack()">⬇️ download</button>
+
   <div class="menu" id="prank-menu"></div>
-
-  <button class="download-btn" onclick="startFakeHack()">⬇️ Download</button>
-  <button class="shuffle-btn" onclick="shuffleLinks()">🔀 Shuffle</button>
-
-  <div class="graph" id="graph1"></div>
-  <div class="graph" id="graph2"></div>
 </div>
 
 <script>
@@ -153,16 +115,15 @@ const hackScreen=document.getElementById("hack-screen");
 const biosLines=[
 "Phoenix BIOS v12.4.7",
 "Memory Test: 32768MB OK",
-"Initializing Satellite Array...",
-"Authenticating Space Relay...",
-"Booting Originake Starlink OS..."
+"Init Satellitez Array...",
+"Auth Space Relay...",
+"Booting Starlink WiFi OS..."
 ];
 
 let i=0;
 function typeLines(target,lines,callback){
   if(i<lines.length){
-    let line=document.createElement("div");
-    target.appendChild(line);
+    let line=document.createElement("div");target.appendChild(line);
     let text=lines[i];let j=0;
     let typing=setInterval(()=>{
       line.textContent+=text[j];j++;
@@ -175,46 +136,30 @@ function startBIOS(){bios.style.display="block";typeLines(bios,biosLines,()=>{bi
 /* TERMINAL % */
 function startTerminal(){
   terminal.style.display="block";
-  terminal.innerHTML="Establishing encrypted satellite tunnel... <span>0%</span>";
+  terminal.innerHTML="Connecting to satellitez... <span>0%</span>";
   let percent=0;
   let span=terminal.querySelector("span");
   let load=setInterval(()=>{
     percent++;span.textContent=percent+"%";
-    if(percent>=100){clearInterval(load);terminal.innerHTML+="<br>Satellite Link Established ✔";setTimeout(()=>{terminal.style.display="none";main.style.display="block";startGraphs();},1000);}
+    if(percent>=100){clearInterval(load);terminal.innerHTML+="<br>Link UP ✔";setTimeout(()=>{terminal.style.display="none";main.style.display="block";},1000);}
   },20);
 }
 
-/* FAKE HACK DOWNLOAD */
+/* FAKE HACK */
 function startFakeHack(){
   main.style.display="none";
   hackScreen.style.display="block";
-  hackScreen.innerHTML="Downloading secure satellite data... <span>0%</span>";
+  hackScreen.innerHTML="Downloading secret data... <span>0%</span>";
   let percent=0;
   let span=hackScreen.querySelector("span");
   let load=setInterval(()=>{
     percent++;span.textContent=percent+"%";
-    if(percent===60){hackScreen.innerHTML+="<br><br>⚠ Unauthorized access detected!";}
-    if(percent>=100){clearInterval(load);hackScreen.innerHTML+="<br>Redirecting...";setTimeout(()=>{window.location.href="https://www.youtube.com/watch?v=xvFZjo5PgG0";},1500);}
+    if(percent===60){hackScreen.innerHTML+="<br><br>⚠ warning.. detectz";}
+    if(percent>=100){clearInterval(load);hackScreen.innerHTML+="<br>Redirect...";setTimeout(()=>{window.location.href="https://www.youtube.com/watch?v=xvFZjo5PgG0";},1500);}
   },25);
 }
 
-/* GRAPHS */
-function startGraphs(){
-  animateGraph("graph1");animateGraph("graph2");
-}
-function animateGraph(id){
-  const graph=document.getElementById(id);
-  setInterval(()=>{
-    let bar=document.createElement("div");
-    bar.className="line";
-    bar.style.left=Math.random()*100+"%";
-    bar.style.height=Math.random()*100+"%";
-    graph.appendChild(bar);
-    setTimeout(()=>bar.remove(),1000);
-  },100);
-}
-
-/* ALL LINKS */
+/* LINKS */
 const prankLinks=[
 {url:"https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1",label:"🎵 Rickroll"},
 {url:"https://fakeupdate.net/win10/",label:"🖥️ Windows Update"},
@@ -254,15 +199,12 @@ const prankLinks=[
 {url:"https://www.ringingtelephone.com/",label:"☎️ Ring Ring!"},
 {url:"https://www.hackertyper.com/",label:"👨‍💻 Hacker Typer"}
 ];
+
 function shuffleLinks(){
   const menu=document.getElementById("prank-menu");
   menu.innerHTML="";
   prankLinks.sort(()=>0.5-Math.random()).slice(0,6).forEach(link=>{
-    const a=document.createElement("a");
-    a.href=link.url;
-    a.target="_blank";
-    a.textContent=link.label;
-    menu.appendChild(a);
+    const a=document.createElement("a");a.href=link.url;a.target="_blank";a.textContent=link.label;menu.appendChild(a);
   });
 }
 shuffleLinks();
