@@ -3,123 +3,59 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FREE STARLINK WIFI</title>
+<title>Starlink Wi-Fi</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{
-  background:black;
-  color:white;
-  height:100vh;
-  overflow:hidden;
-  font-family:Segoe UI,Arial,sans-serif;
-}
+body{background:black;color:white;font-family:Arial,sans-serif;height:100vh;overflow:hidden;}
 
 /* STARTSCREEN */
 #start-screen{
-  position:fixed;
-  inset:0;
-  background:black;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  z-index:10000;
-}
-
-/* LOGO */
-#wappen{
-  width:150px;
-  height:auto;
-}
-
-/* NAME */
-#start-text{
-  margin-top:30px;
-  font-size:3rem;
-  font-weight:bold;
-  color:#FFD700;
-  letter-spacing:0.1em;
-  position:relative;
-}
-
-/* LETTER PARTICLE */
-.letter{
-  position:absolute;
-  display:inline-block;
-  color:#FFD700;
-}
-
-/* BOOTING LOADING */
-#loading-overlay{
-  position:fixed;inset:0;
-  background:black;
-  color:#00ff00;
-  font-family:Consolas,monospace;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-start;
-  align-items:flex-start;
-  font-size:1.5rem;
+  position:fixed;inset:0;background:black;
+  display:flex;flex-direction:column;
+  justify-content:center;align-items:center;
   z-index:9999;
-  padding:20px;
-  white-space:pre-wrap;
-  display:none;
+}
+#start-title{font-size:3rem;color:#FFD700;margin-bottom:40px;text-align:center;}
+#boot-btn{padding:15px 35px;font-size:1.4rem;background:#111;color:white;border:none;border-radius:10px;cursor:pointer;}
+
+/* LOADING */
+#loading{
+  position:fixed;inset:0;background:black;color:#00ff00;
+  font-family:Consolas,monospace;padding:30px;
+  font-size:1.3rem;white-space:pre-wrap;display:none;
 }
 
 /* MAIN */
 #main{
-  position:fixed;
-  inset:0;
-  display:none;
-  flex-direction:column;
-  justify-content:space-between;
-  padding:30px;
+  display:none;position:fixed;inset:0;padding:20px;
   background:linear-gradient(180deg,#000814,#001d3d);
-  transition: transform 1s ease-in-out;
+  display:flex;flex-direction:column;justify-content:space-between;
+  transition:1s;
 }
-
-#links{text-align:center;font-size:1rem;}
-#links a{color:#bbb;margin:0 10px;text-decoration:none;}
+#links{text-align:center;margin-bottom:10px;}
+#links a{margin:0 8px;color:#bbb;text-decoration:none;}
 #links a:hover{color:white;}
-#shuffle{display:block;margin:15px auto;padding:8px 15px;background:#111;border:none;color:white;cursor:pointer;}
-#text{text-align:center;font-size:2rem;font-weight:600;line-height:1.8;margin-top:20px;}
-#download{width:80%;margin:20px auto;padding:20px;font-size:2rem;border:none;border-radius:12px;cursor:pointer;background:linear-gradient(45deg,#ff00cc,#3333ff);color:white;}
-#spinBtn{
-  display:none;
-  margin:20px auto;
-  padding:15px 25px;
-  font-size:1.5rem;
-  background:#333;
-  color:#ff0;
-  border:none;
-  cursor:pointer;
-  border-radius:10px;
-}
-
-/* TERMINAL */
-#terminal{
-  position:fixed;
-  inset:0;
-  background:black;
-  color:#00ff00;
-  font-family:Consolas,monospace;
-  font-size:1rem;
-  padding:20px;
-  display:none;
-  overflow:hidden;
-  white-space:pre;
-  transform: rotateX(10deg);
-}
+button{padding:10px 20px;margin:10px auto;border:none;border-radius:8px;cursor:pointer;}
+#shuffle{background:#111;color:white;}
+#spinBtn{display:none;background:#333;color:yellow;}
+#statsBtn{background:#222;color:#0ff;}
+#download{background:linear-gradient(45deg,#ff00cc,#3333ff);color:white;font-size:1.4rem;}
+#text{text-align:center;font-size:1.6rem;margin:15px;}
+#liveCounter{text-align:center;font-size:1.3rem;color:#0f0;margin:5px;}
+#stats{display:none;font-family:Consolas,monospace;color:#0ff;margin:10px;text-align:center;}
+#graphContainer{width:80%;margin:10px auto;}
+.bar{height:25px;margin:8px 0;background:linear-gradient(90deg,#00ffcc,#0066ff);width:0%;border-radius:6px;transition:width 0.8s;}
+.popup{position:fixed;right:20px;bottom:20px;background:#111;color:#0f0;padding:10px 15px;border-radius:8px;font-size:0.9rem;opacity:0.95;transition:all 0.5s;}
 </style>
 </head>
 <body>
 
 <div id="start-screen">
-  <img id="wappen" src="wappen.png" alt="Wappen">
-  <div id="start-text"></div>
+  <div id="start-title">Welcome to Wi-Fi</div>
+  <button id="boot-btn">Connect</button>
 </div>
 
-<div id="loading-overlay"></div>
+<div id="loading"></div>
 
 <div id="main">
   <div>
@@ -135,14 +71,24 @@ body{
     It from Temu satellite.
   </div>
 
-  <button id="download" onclick="startDownload()">⬇ DOWNLOAD FREE WIFI</button>
-  <button id="spinBtn" onclick="spinWebsite()">🌪 Website spinnt!</button>
+  <div id="liveCounter">👥 5482 people using this WiFi now</div>
+
+  <div id="graphContainer">
+    <div>🚀 Download Speed</div>
+    <div class="bar" id="downloadBar"></div>
+    <div>📤 Upload Speed</div>
+    <div class="bar" id="uploadBar"></div>
+  </div>
+
+  <button id="statsBtn">📊 Show Internet Stats</button>
+  <div id="stats"></div>
+
+  <button id="download">⬇ DOWNLOAD FREE WIFI</button>
+  <button id="spinBtn">🌪 Website spinnt!</button>
 </div>
 
-<div id="terminal"></div>
-
 <script>
-/* ================= LINKS ================= */
+/* ================= ALL LINKS WITH EMOJIS ================= */
 const prankLinks=[
 {url:"https://www.youtube.com/watch?v=xvFZjo5PgG0",label:"🎵 Rickroll"},
 {url:"https://fakeupdate.net/win10/",label:"🖥 Windows Update"},
@@ -183,6 +129,8 @@ const prankLinks=[
 {url:"https://www.hackertyper.com/",label:"👨‍💻 Hacker Typer"}
 ];
 
+/* ================= SHUFFLE BUTTON ================= */
+let shuffleClicks=0;
 function shuffleLinks(){
   const container=document.getElementById("links");
   container.innerHTML="";
@@ -198,92 +146,44 @@ function shuffleLinks(){
     document.getElementById("spinBtn").style.display="block";
   }
 }
-let shuffleClicks=0;
+document.getElementById("shuffle").onclick=shuffleLinks;
 shuffleLinks();
 
-/* ================= STARTSCREEN LETTER ANIMATION ================= */
-const startText=document.getElementById("start-text");
-const startScreen=document.getElementById("start-screen");
-const loadingOverlay=document.getElementById("loading-overlay");
+/* ================= LIVE COUNTER ================= */
+let users=5482;
+setInterval(()=>{
+  users+=Math.floor(Math.random()*11)-5;
+  document.getElementById("liveCounter").innerText="👥 "+users+" people using this WiFi now";
+},2000);
 
-function createLetterElements(name){
-  startText.innerHTML="";
-  const letters=[];
-  for(let i=0;i<name.length;i++){
-    const span=document.createElement("span");
-    span.textContent=name[i];
-    span.className="letter";
-    startText.appendChild(span);
-    letters.push(span);
-  }
-  return letters;
+/* ================= SPEED GRAPH ================= */
+function updateSpeed(){
+  const down=Math.floor(Math.random()*900)+100;
+  const up=Math.floor(Math.random()*500)+50;
+  document.getElementById("downloadBar").style.width=(down/10)+"%";
+  document.getElementById("uploadBar").style.width=(up/10)+"%";
 }
+setInterval(updateSpeed,1500);
+updateSpeed();
 
-setTimeout(()=>{
-  const name="Enea Rohner";
-  const letters=createLetterElements(name);
-  let idx=0;
-  const typeInterval=setInterval(()=>{
-    if(idx<letters.length){
-      letters[idx].style.opacity="1";
-      letters[idx].style.transition="opacity 0.2s";
-      idx++;
-    } else {
-      clearInterval(typeInterval);
-      setTimeout(()=>collapseLetters(letters),800);
-    }
-  },150);
-},1000);
+/* ================= FAKE STATS ================= */
+document.getElementById("statsBtn").onclick=function(){
+  const stats=document.getElementById("stats");
+  if(stats.style.display==="none"){
+    stats.style.display="block";
+    stats.innerHTML=`IP: 192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}<br>
+Port: ${Math.floor(Math.random()*60000)+1000}<br>
+Ping: ${Math.floor(Math.random()*50)+5} ms<br>
+Download Speed: ${Math.floor(Math.random()*900)+100} Mbps<br>
+Upload Speed: ${Math.floor(Math.random()*500)+50} Mbps`;
+  } else {stats.style.display="none";}
+};
 
-function collapseLetters(letters){
-  const target="ER";
-  letters.forEach((letter,i)=>{
-    const targetPos = i<2 ? i*25 : 25; 
-    letter.style.transition="all 1s ease-in-out";
-    const offsetX = targetPos - letter.offsetLeft;
-    const offsetY = 0;
-    letter.style.transform=`translate(${offsetX}px, ${offsetY}px) scale(0.5)`;
-    if(i>=2) letter.style.opacity="0";
-  });
-  setTimeout(()=>{startScreen.style.display="none"; startBooting();},1200);
-}
-
-/* ================= LOADING / TYPING EFFECT ================= */
-function startBooting(){
-  loadingOverlay.style.display="flex";
-  const bootLines=[
-    "Booting FREE STARLINK WiFi...",
-    "Connecting to Temu Satellite...",
-    "Authorizing Elon Musk...",
-    "Launching Interface..."
-  ];
-  let lineIndex=0;
-  let charIndex=0;
-  function typeLine(){
-    if(lineIndex<bootLines.length){
-      if(charIndex<bootLines[lineIndex].length){
-        loadingOverlay.textContent += bootLines[lineIndex][charIndex];
-        charIndex++;
-        setTimeout(typeLine,50);
-      } else {
-        loadingOverlay.textContent += "\n";
-        lineIndex++;
-        charIndex=0;
-        setTimeout(typeLine,200);
-      }
-    } else {
-      setTimeout(()=>{loadingOverlay.style.display="none"; document.getElementById("main").style.display="flex";},500);
-    }
-  }
-  typeLine();
-}
-
-/* ================= DOWNLOAD TERMINAL ================= */
-function startDownload(){
+/* ================= DOWNLOAD / TERMINAL ================= */
+document.getElementById("download").onclick=function(){
+  const term=document.getElementById("loading");
   document.getElementById("main").style.display="none";
-  const term=document.getElementById("terminal");
   term.style.display="block";
-
   const messages=[
     "Start Downloading...",
     "Virus Comprimised...",
@@ -292,40 +192,70 @@ function startDownload(){
     "Virus Activated...",
     "SYSTEM HACKED..."
   ];
-
-  let percent=0;
-  let msgIndex=0;
-
+  let percent=0,msgIndex=0;
   const interval=setInterval(()=>{
     let line="";
     const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789{}[]<>/\\#$%^&*";
-    for(let i=0;i<140;i++){
-      line+=chars[Math.floor(Math.random()*chars.length)];
-    }
+    for(let i=0;i<140;i++){line+=chars[Math.floor(Math.random()*chars.length)];}
     term.textContent+=line+"\n";
-
     percent++;
-    if(percent % 50 === 0 && msgIndex<messages.length){
-      term.textContent+=messages[msgIndex]+"\n";
-      msgIndex++;
-    }
-
-    if(percent>250){
-      clearInterval(interval);
-      term.textContent+="\nSYSTEM OVERRIDE COMPLETE...\n";
-      setTimeout(()=>{
-        window.location.href="https://www.youtube.com/watch?v=xvFZjo5PgG0&autoplay=1";
-      },1500);
-    }
+    if(percent%50===0 && msgIndex<messages.length){term.textContent+=messages[msgIndex]+"\n";msgIndex++;}
+    if(percent>250){clearInterval(interval);term.textContent+="\nSYSTEM OVERRIDE COMPLETE...\n";
+      setTimeout(()=>{window.location.href="https://www.youtube.com/watch?v=xvFZjo5PgG0&autoplay=1";},1500);}
   },15);
-}
+};
 
 /* ================= SPIN WEBSITE ================= */
-function spinWebsite(){
+document.getElementById("spinBtn").onclick=function(){
   const main=document.getElementById("main");
   main.style.transform="rotate(720deg) scale(1.1)";
   setTimeout(()=>{main.style.transform="rotate(0deg) scale(1)";},2000);
+};
+
+/* ================= POPUPS ================= */
+const celebrities=[
+"Elon Musk","Mark Zuckerberg","Jeff Bezos","Bill Gates","Sundar Pichai","Tim Cook","Larry Page","Sergey Brin","Jack Dorsey","Satya Nadella",
+"Sheryl Sandberg","Susan Wojcicki","Evan Spiegel","Reed Hastings","Daniel Ek","Travis Kalanick","Brian Chesky","Marc Andreessen","Peter Thiel","Steve Wozniak",
+"Adam Neumann","Drew Houston","Jan Koum","Evan Williams","Whitney Wolfe Herd","Tony Hsieh","Elon Musk Jr.","Mark Cuban","Richard Branson","Larry Ellison",
+"Michael Dell","Jerry Yang","David Filo","Meg Whitman","Vinod Khosla","Marc Lore","Patrick Collison","John Collison","Anne Wojcicki","Paul Allen",
+"George Hotz","Stewart Butterfield","Ben Silbermann","Kevin Systrom","Mike Krieger","Dara Khosrowshahi","Evan Sharp","Travis VanderZanden","Daniel Zhang","Lei Jun"
+];
+function showPopup(){
+  const popup=document.createElement("div");
+  popup.className="popup";
+  popup.innerText=`${celebrities[Math.floor(Math.random()*celebrities.length)]} has just connected to WiFi!`;
+  document.body.appendChild(popup);
+  setTimeout(()=>{popup.remove();},3000);
 }
+setInterval(()=>{if(Math.random()<0.5){showPopup();}},1500+Math.random()*3500);
+
+/* ================= BOOTING ================= */
+document.getElementById("boot-btn").onclick=function(){
+  const loading=document.getElementById("loading");
+  document.getElementById("start-screen").style.display="none";
+  loading.style.display="block";
+  const bootLines=[
+    "Booting FREE STARLINK WiFi...",
+    "Connecting to Temu Satellite...",
+    "Authorizing Elon Musk...",
+    "Launching Interface..."
+  ];
+  let lineIndex=0,charIndex=0;
+  function typeLine(){
+    if(lineIndex<bootLines.length){
+      if(charIndex<bootLines[lineIndex].length){
+        loading.textContent+=bootLines[lineIndex][charIndex];
+        charIndex++;
+        setTimeout(typeLine,50);
+      } else {
+        loading.textContent+="\n";
+        lineIndex++; charIndex=0;
+        setTimeout(typeLine,200);
+      }
+    } else {setTimeout(()=>{loading.style.display="none";document.getElementById("main").style.display="flex";},500);}
+  }
+  typeLine();
+};
 </script>
 </body>
 </html>
