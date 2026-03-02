@@ -14,7 +14,7 @@ body{
   font-family:Segoe UI,Arial,sans-serif;
 }
 
-/* START SCREEN */
+/* STARTSCREEN */
 #start-screen{
   position:fixed;
   inset:0;
@@ -23,23 +23,30 @@ body{
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  font-size:3rem;
-  font-weight:bold;
-  text-align:center;
   z-index:10000;
 }
 
-#start-text{
-  margin-top:20px;
-  font-size:3rem;
-  letter-spacing:0.1em;
-  color:#FFD700; /* Golden nur für deinen Namen */
-}
-
-/* WAPPEN */
+/* LOGO */
 #wappen{
   width:150px;
   height:auto;
+}
+
+/* NAME */
+#start-text{
+  margin-top:30px;
+  font-size:3rem;
+  font-weight:bold;
+  color:#FFD700;
+  letter-spacing:0.1em;
+  position:relative;
+}
+
+/* LETTER PARTICLE */
+.letter{
+  position:absolute;
+  display:inline-block;
+  color:#FFD700;
 }
 
 /* BOOTING LOADING */
@@ -57,17 +64,6 @@ body{
   padding:20px;
   white-space:pre-wrap;
   display:none;
-}
-
-/* START BUTTON */
-#start-btn{
-  margin-top:40px;
-  padding:10px 20px;
-  font-size:1.5rem;
-  background:#111;
-  color:#00ff00;
-  border:none;
-  cursor:pointer;
 }
 
 /* MAIN */
@@ -88,6 +84,17 @@ body{
 #shuffle{display:block;margin:15px auto;padding:8px 15px;background:#111;border:none;color:white;cursor:pointer;}
 #text{text-align:center;font-size:2rem;font-weight:600;line-height:1.8;margin-top:20px;}
 #download{width:80%;margin:20px auto;padding:20px;font-size:2rem;border:none;border-radius:12px;cursor:pointer;background:linear-gradient(45deg,#ff00cc,#3333ff);color:white;}
+#spinBtn{
+  display:none;
+  margin:20px auto;
+  padding:15px 25px;
+  font-size:1.5rem;
+  background:#333;
+  color:#ff0;
+  border:none;
+  cursor:pointer;
+  border-radius:10px;
+}
 
 /* TERMINAL */
 #terminal{
@@ -103,27 +110,13 @@ body{
   white-space:pre;
   transform: rotateX(10deg);
 }
-
-/* SPIN BUTTON */
-#spinBtn{
-  display:none;
-  margin:20px auto;
-  padding:15px 25px;
-  font-size:1.5rem;
-  background:#333;
-  color:#ff0;
-  border:none;
-  cursor:pointer;
-  border-radius:10px;
-}
 </style>
 </head>
 <body>
 
 <div id="start-screen">
   <img id="wappen" src="wappen.png" alt="Wappen">
-  <div id="start-text">Enea Rohner</div>
-  <button id="start-btn">START BOOTING</button>
+  <div id="start-text"></div>
 </div>
 
 <div id="loading-overlay"></div>
@@ -208,24 +201,52 @@ function shuffleLinks(){
 let shuffleClicks=0;
 shuffleLinks();
 
-/* ================= STARTSCREEN ANIMATION ================= */
+/* ================= STARTSCREEN LETTER ANIMATION ================= */
 const startText=document.getElementById("start-text");
 const startScreen=document.getElementById("start-screen");
 const loadingOverlay=document.getElementById("loading-overlay");
-document.getElementById("start-btn").addEventListener("click",()=>{
-  let full="Enea Rohner";
-  let display=full.split("");
-  let interval=setInterval(()=>{
-    if(display.length>2){
-      display.splice(Math.floor(Math.random()*display.length),1);
-      startText.textContent=display.join("");
+
+function createLetterElements(name){
+  startText.innerHTML="";
+  const letters=[];
+  for(let i=0;i<name.length;i++){
+    const span=document.createElement("span");
+    span.textContent=name[i];
+    span.className="letter";
+    startText.appendChild(span);
+    letters.push(span);
+  }
+  return letters;
+}
+
+setTimeout(()=>{
+  const name="Enea Rohner";
+  const letters=createLetterElements(name);
+  let idx=0;
+  const typeInterval=setInterval(()=>{
+    if(idx<letters.length){
+      letters[idx].style.opacity="1";
+      letters[idx].style.transition="opacity 0.2s";
+      idx++;
     } else {
-      clearInterval(interval);
-      startScreen.style.display="none";
-      startBooting();
+      clearInterval(typeInterval);
+      setTimeout(()=>collapseLetters(letters),800);
     }
-  },200);
-});
+  },150);
+},1000);
+
+function collapseLetters(letters){
+  const target="ER";
+  letters.forEach((letter,i)=>{
+    const targetPos = i<2 ? i*25 : 25; 
+    letter.style.transition="all 1s ease-in-out";
+    const offsetX = targetPos - letter.offsetLeft;
+    const offsetY = 0;
+    letter.style.transform=`translate(${offsetX}px, ${offsetY}px) scale(0.5)`;
+    if(i>=2) letter.style.opacity="0";
+  });
+  setTimeout(()=>{startScreen.style.display="none"; startBooting();},1200);
+}
 
 /* ================= LOADING / TYPING EFFECT ================= */
 function startBooting(){
