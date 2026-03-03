@@ -73,7 +73,7 @@ font-family:'Share Tech Mono',monospace;
 <div class="buttonRow">
 <button onclick="shuffleLinks()">Shuffle Links</button>
 <button onclick="toggleStats()">Internet Stats</button>
-<div id="middleText">Fre WiFy <br>Downlod Now <br> Starlinq <br> Buy from Cybertruk <br> This is from the official Tislo Storlinked compani <br> No fake!,! youll get free truck!! </div>
+<div id="middleText">Free Wlan <br>Downlod Now <br> Starlink <br> Downloads now for free <br> This is newest internet technoligie </div>
 <button class="largeButton" onclick="startDownload()">Download</button>
 </div>
 
@@ -92,7 +92,7 @@ font-family:'Share Tech Mono',monospace;
 
 <script>
 // === Booting with typing effect ===
-const bootLines = ["Booting system...", "Loading drivers...", "Scanning ports...", "Preparing connection...", "scamming people..."];
+const bootLines = ["Booting system...", "Loading drivers...", "Scanning ports...", "Preparing connection..."];
 function startBoot(){
   document.getElementById("bootScreen").style.display="none";
   const overlay = document.getElementById("bootOverlay");
@@ -161,7 +161,7 @@ function startDownload(){
   const term = document.getElementById("terminal");
   term.style.display="block";
   term.innerHTML="";
-  const lines = ["Initializing download...","Scanning system...","Virus downloading...","Launching attack...","Scamming People...","Destroing Software..."];
+  const lines = ["Initializing download...","Scanning system...","Virus downloading...","Launching attack...","Destroing Software..."];
   let index=0;
   function typeLine(){
     if(index<lines.length){
